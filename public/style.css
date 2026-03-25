@@ -315,3 +315,37 @@ header p {
     font-size: 0.8rem;
     opacity: 0.6;
 }
+
+/* Evita que la carta reaccione al cursor una vez volteada */
+.card.flipped {
+    pointer-events: none; /* Esto impide que el hover afecte la carta abierta */
+    transform: rotateY(180deg);
+}
+
+/* Asegúrate de que la cara trasera tenga visibilidad total */
+.card-back {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex !important; /* Fuerza a que se mantenga visible */
+    transform: rotateY(180deg);
+    z-index: 2;
+}
+
+/* Si tienes alguna regla de hover que cambie la opacidad, límpiala así: */
+.card.flipped:hover {
+    opacity: 1 !important;
+    filter: none !important;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente */
+    justify-content: center;
+}
+
+#input-room {
+    width: 160px; /* Tamaño específico para el código */
+    text-align: center;
+    margin: 10px 0;
+}
