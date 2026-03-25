@@ -154,3 +154,37 @@ body.game-active #game-board {
 body.game-active .ui-container {
     display: flex !important;
 }
+
+/* 1. Asegura que el Lobby sea visible al cargar la página */
+#lobby-overlay {
+    display: flex !important; /* Usamos flex para centrar el contenido */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg-dark);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* 2. Oculta el juego y la UI mientras estemos en el lobby */
+.ui-container, #game-board, .game-header {
+    display: none !important;
+}
+
+/* 3. CUANDO EL JUEGO INICIA (Cambio de estado) */
+body.game-active #lobby-overlay {
+    display: none !important; /* Aquí es donde desaparece el menú */
+}
+
+body.game-active .ui-container {
+    display: flex !important;
+}
+
+body.game-active #game-board {
+    display: grid !important;
+}
+
+body.game-active .game-header {
+    display: block !important;
+}
