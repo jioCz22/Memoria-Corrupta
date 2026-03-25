@@ -9,7 +9,7 @@ lobby.id = 'lobby-ui';
 lobby.innerHTML = `
     <div class="modal">
         <div class="modal-content">
-            <h2 style="color:#00ffcc; font-family:'Orbitron';">BIO-LINK ONLINE</h2>
+            <h2 style="color:#00ffcc; font-family:'Orbitron';">Corruptotes</h2>
             <button id="btn-crear" class="reload-btn">CREAR SALA</button>
             <p style="color:#88a1a5; margin:15px 0;">— O —</p>
             <input type="text" id="input-room" maxlength="5" placeholder="CÓDIGO" style="width:100%; padding:10px; background:#000; border:1px solid #00ffcc; color:#fff; text-align:center; margin-bottom:10px;">

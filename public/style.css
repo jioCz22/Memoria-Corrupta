@@ -1,53 +1,35 @@
-/* --- VARIABLES Y RESET --- */
+/* --- VARIABLES --- */
 :root {
     --bg-dark: #01080a;
-    --bg-panel: rgba(7, 20, 26, 0.85);
+    --bg-panel: rgba(7, 20, 26, 0.9);
     --accent: #00ffcc;
     --accent-secondary: #0099ff;
     --error: #ff3366;
     --text: #e0fbff;
-    --card-back-bg: #ffffff;
     --font-tech: 'Orbitron', sans-serif;
     --font-body: 'Roboto', sans-serif;
 }
 
+/* --- BASE --- */
 body {
-    background-color: var(--bg-dark);
-    background-image: 
-        url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48ZyBmaWxsPSIjMDA0NDU1IiBmaWxsLW9wYWNpdHk9IjAuMTUiPjxwYXRoIGQ9Ik0wIDE1bDIwIDEwTDIwIDAgMCAxNXpNMjAgMEwwIDE1bDIwIDEwaDBWMHozTTgwIDE1bC0yMCAxMEwtMjAgMCA4MCAxNXpNNjAgMEw4MCAxNWwtMjAgMTB6TTAgNjVsMjAgMTBMMjAgNTAgMCA2NXpNMjAgNTBMMCA2NWwyMCAxMHozTTgwIDY1bC0yMCAxMEwtMjAgNTAgODAgNjV6TTYwIDUwTDgwIDY1bC0yMCAxMHpNMzAgMDBMMTUgMjBMMzAgNDBMMTUgNjBMMzAgODBMNjAgODBMNDUgNjBMNjAgNDBMNDUgMjBMNjAgMHpNMzAgMTVsMTUgMjBMMzAgNTVMMTUgMzV6TTMwIDU1bDE1IDIwTDMwIDkwTDE1IDcwegoiLz48L2c+PC9zdmc+'),
-        radial-gradient(circle at center, #062129 0%, #01080a 100%);
-    background-attachment: fixed;
+    margin: 0;
+    background: radial-gradient(circle, #062129, #01080a);
     color: var(--text);
     font-family: var(--font-body);
-    margin: 0;
     overflow-x: hidden;
-    animation: backgroundPulse 15s ease-in-out infinite;
-}
-
-@keyframes backgroundPulse {
-    0%, 100% { background-color: #01080a; }
-    50% { background-color: #031317; }
-}
-
-.main-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
 }
 
 /* --- HEADER --- */
 header {
     text-align: center;
-    padding: 20px 10px;
-    width: 100%;
+    padding: 15px;
 }
 
 header h1 {
     font-family: var(--font-tech);
     color: var(--accent);
+    font-size: 2.5rem;
     margin: 0;
-    font-size: 3rem;
 }
 
 header p {
@@ -58,48 +40,51 @@ header p {
 /* --- UI --- */
 .ui-container {
     display: flex;
-    gap: 30px;
-    padding: 20px;
-    align-items: center;
     justify-content: center;
-    width: 100%;
+    align-items: center;
+    gap: 25px;
+    padding: 10px;
 }
 
 .player-box {
     background: var(--bg-panel);
-    padding: 15px 30px;
-    border-radius: 12px;
-    opacity: 0.4;
+    padding: 12px 20px;
+    border-radius: 10px;
+    opacity: 0.5;
     text-align: center;
+    min-width: 120px;
 }
 
 .player-box.active {
     opacity: 1;
+    box-shadow: 0 0 15px var(--accent);
+}
+
+.player-header {
+    font-family: var(--font-tech);
+    font-size: 1rem;
+    margin-bottom: 5px;
 }
 
 .stats {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
+    font-size: 0.9rem;
 }
 
-.stat-item .value {
-    font-size: 1.3rem;
+/* --- INFO CENTRO --- */
+.center-ui {
+    text-align: center;
+    font-family: var(--font-tech);
+    color: var(--accent);
 }
 
-/* --- BOTÓN --- */
-#start-btn {
-    padding: 15px 30px;
-    border-radius: 50px;
-}
-
-/* --- GRID RESPONSIVE (CLAVE) --- */
+/* --- GRID --- */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(11, 1fr);
-    gap: 10px;
+    gap: 8px;
     width: 98vw;
-    margin: 20px auto;
+    max-width: 1400px;
+    margin: 10px auto 30px;
 }
 
 /* --- TARJETAS --- */
@@ -107,7 +92,7 @@ header p {
     aspect-ratio: 3/4;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.6s;
+    transition: transform 0.5s;
     cursor: pointer;
 }
 
@@ -119,54 +104,104 @@ header p {
     position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: 10px;
+    border-radius: 8px;
     backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* Frente */
 .card-front {
     background: #0d2b2e;
 }
 
 .card-front::after {
-    content: '🧬';
-    font-size: 2.5rem;
+    content: "🧬";
+    font-size: 2rem;
 }
 
+/* Atrás */
 .card-back {
-    background: white;
+    background: #fff;
+    color: #000;
     transform: rotateY(180deg);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    text-align: center;
+    padding: 5px;
+    flex-direction: column;
 }
 
-/* --- MODAL --- */
+.card-back img {
+    max-width: 90%;
+    max-height: 70%;
+    object-fit: contain;
+}
+
+.card-back span {
+    font-size: 0.6rem;
+}
+
+/* CORRECTO / INCORRECTO */
+.card.correct {
+    box-shadow: 0 0 15px #00ff88;
+}
+
+.card.wrong {
+    box-shadow: 0 0 15px var(--error);
+}
+
+/* --- MODAL / LOBBY --- */
 .modal {
     position: fixed;
     inset: 0;
+    background: rgba(0,0,0,0.9);
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    z-index: 100;
 }
 
 .modal-content {
-    padding: 40px;
+    background: #051216;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 320px;
+    max-width: 90%;
+}
+
+.reload-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: var(--accent);
+    border: none;
+    font-family: var(--font-tech);
+    cursor: pointer;
+}
+
+/* --- UTIL --- */
+.hidden {
+    display: none !important;
 }
 
 /* ============================= */
-/* 📱 RESPONSIVE REAL */
+/* 📱 RESPONSIVE */
 /* ============================= */
 
-/* Tablets */
+/* Tablet */
 @media (max-width: 1024px) {
     .grid-container {
         grid-template-columns: repeat(6, 1fr);
     }
 }
 
-/* Celulares */
+/* Celular */
 @media (max-width: 600px) {
 
     header h1 {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
 
     header p {
@@ -175,8 +210,7 @@ header p {
 
     .ui-container {
         flex-direction: column;
-        gap: 15px;
-        padding: 10px;
+        gap: 10px;
     }
 
     .player-box {
@@ -186,8 +220,7 @@ header p {
 
     .grid-container {
         grid-template-columns: repeat(4, 1fr);
-        gap: 6px;
-        width: 95vw;
+        gap: 5px;
     }
 
     .card {
@@ -195,21 +228,18 @@ header p {
     }
 
     .card-front::after {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
 
     .card-back {
-        font-size: 0.6rem;
-        padding: 5px;
+        font-size: 0.55rem;
     }
 
-    #start-btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
+    .card-back span {
+        font-size: 0.5rem;
     }
 
     .modal-content {
-        width: 90%;
         padding: 20px;
     }
 }
@@ -221,7 +251,7 @@ header p {
     }
 }
 
-/* Quitar hover en móviles */
+/* Quitar hover en móvil */
 @media (hover: none) {
     .card:hover {
         transform: none;
