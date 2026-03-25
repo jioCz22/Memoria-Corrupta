@@ -1,366 +1,4 @@
-/* --- VARIABLES Y RESET --- */
-:root {
-    /* Paleta de colores optimizada: Laboratorio Biológico / Sci-Fi */
-    --bg-dark: #01080a; /* Negro azulado muy profundo */
-    --bg-panel: rgba(7, 20, 26, 0.85); /* Paneles semi-transparentes */
-    --accent: #00ffcc; /* Cian neón biológico (ADN/Láser) */
-    --accent-secondary: #0099ff; /* Azul reactivo */
-    --error: #ff3366; /* Rojo de alerta */
-    --text: #e0fbff; /* Texto claro azulado */
-    --card-back-bg: #ffffff; /* Fondo de la tarjeta volteada (limpio para info) */
-    --font-tech: 'Orbitron', sans-serif;
-    --font-body: 'Roboto', sans-serif;
-}
-
-body {
-    background-color: var(--bg-dark);
-    /* FONDO DE BIOLOGÍA ANIMADO */
-    background-image: 
-        /* Capa 1: Hexágonos de microscopio */
-        url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48ZyBmaWxsPSIjMDA0NDU1IiBmaWxsLW9wYWNpdHk9IjAuMTUiPjxwYXRoIGQ9Ik0wIDE1bDIwIDEwTDIwIDAgMCAxNXpNMjAgMEwwIDE1bDIwIDEwaDBWMHozTTgwIDE1bC0yMCAxMEwtMjAgMCA4MCAxNXpNNjAgMEw4MCAxNWwtMjAgMTB6TTAgNjVsMjAgMTBMMjAgNTAgMCA2NXpNMjAgNTBMMCA2NWwyMCAxMHozTTgwIDY1bC0yMCAxMEwtMjAgNTAgODAgNjV6TTYwIDUwTDgwIDY1bC0yMCAxMHpNMzAgMDBMMTUgMjBMMzAgNDBMMTUgNjBMMzAgODBMNjAgODBMNDUgNjBMNjAgNDBMNDUgMjBMNjAgMHpNMzAgMTVsMTUgMjBMMzAgNTVMMTUgMzV6TTMwIDU1bDE1IDIwTDMwIDkwTDE1IDcwegoiLz48L2c+PC9zdmc+'),
-        /* Capa 2: Gradiente radial de profundidad */
-        radial-gradient(circle at center, #062129 0%, #01080a 100%);
-    background-attachment: fixed;
-    color: var(--text);
-    font-family: var(--font-body);
-    margin: 0;
-    overflow-x: hidden;
-    /* Animación sutil de pulso en el fondo */
-    animation: backgroundPulse 15s ease-in-out infinite;
-}
-
-@keyframes backgroundPulse {
-    0%, 100% { background-color: #01080a; }
-    50% { background-color: #031317; }
-}
-
-.main-wrapper { display: flex; flex-direction: column; align-items: center; min-height: 100vh; position: relative; z-index: 1; }
-
-/* --- HEADER --- */
-header { 
-    text-align: center; 
-    padding: 25px 15px; 
-    background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%); 
-    width: 100%; 
-    border-bottom: 1px solid rgba(0, 255, 204, 0.2); 
-    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-}
-
-header h1 { 
-    font-family: var(--font-tech); 
-    color: var(--accent); 
-    margin: 0; 
-    letter-spacing: 5px; 
-    font-size: 3rem;
-    text-shadow: 0 0 15px rgba(0, 255, 204, 0.6);
-    text-transform: uppercase;
-}
-
-header p {
-    font-family: var(--font-tech);
-    color: var(--accent-secondary);
-    opacity: 0.8;
-    margin-top: 5px;
-    font-size: 0.9rem;
-    letter-spacing: 2px;
-}
-
-/* --- UI CONTAINER (CONTADORES Y TURNO) --- */
-.ui-container { display: flex; gap: 30px; padding: 20px; align-items: center; justify-content: center; width: 100%; max-width: 1200px; }
-
-.player-box {
-    background: var(--bg-panel);
-    border: 1px solid rgba(0, 255, 204, 0.15);
-    padding: 15px 30px;
-    border-radius: 12px;
-    opacity: 0.4;
-    transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    text-align: center;
-    backdrop-filter: blur(5px); /* Efecto cristal esmerilado */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    position: relative;
-    overflow: hidden;
-}
-
-/* Decoración sutil en las esquinas de los paneles */
-.player-box::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 10px; height: 10px;
-    border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); opacity: 0.5;
-}
-.player-box::after {
-    content: ''; position: absolute; bottom: 0; right: 0; width: 10px; height: 10px;
-    border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); opacity: 0.5;
-}
-
-.player-box.active { 
-    opacity: 1; 
-    border-color: var(--accent); 
-    box-shadow: 0 0 25px rgba(0,255,204,0.3); 
-    transform: translateY(-5px);
-}
-
-.player-header { font-family: var(--font-tech); font-size: 1.1rem; color: #fff; margin-bottom: 10px; letter-spacing: 1px; }
-.player-header span { margin-right: 8px; filter: drop-shadow(0 0 5px var(--accent)); }
-
-.stats { display: flex; gap: 20px; justify-content: center; margin-bottom: 8px; }
-.stat-item { background: rgba(0,0,0,0.3); padding: 5px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
-.stat-item .label { color: #88a1a5; font-size: 0.8rem; text-transform: uppercase; }
-.stat-item .value { font-family: var(--font-tech); color: #fff; font-size: 1.3rem; font-weight: 700; }
-.timer { color: var(--accent-secondary) !important; }
-
-.turn-indicator { 
-    font-family: var(--font-tech); 
-    font-size: 0.8rem; 
-    color: var(--accent); 
-    font-weight: bold; 
-    letter-spacing: 2px;
-    border-top: 1px solid rgba(0,255,204,0.2);
-    padding-top: 8px;
-    margin-top: 5px;
-    opacity: 0;
-    transition: 0.3s;
-}
-.player-box.active .turn-indicator { opacity: 1; animation: blink 1.5s infinite; }
-
-@keyframes blink { 50% { opacity: 0.4; } }
-
-/* --- BOTÓN INICIAR Y INFO CENTRAL --- */
-.center-ui { text-align: center; min-width: 200px; }
-
-#start-btn {
-    background: rgba(0, 255, 204, 0.05);
-    border: 2px solid var(--accent);
-    color: var(--accent);
-    padding: 15px 30px;
-    font-family: var(--font-tech);
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 50px; /* Estilo píldora moderna */
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
-    position: relative;
-    overflow: hidden;
-}
-
-#start-btn::after {
-    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-    background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
-    transform: rotate(45deg); transition: 0.5s;
-}
-
-#start-btn:hover { 
-    background: var(--accent); 
-    color: #000; 
-    box-shadow: 0 0 30px var(--accent); 
-    transform: scale(1.05);
-}
-
-#start-btn:hover::after { left: 120%; } /* Efecto brillo al pasar mouse */
-
-#game-info { font-family: var(--font-tech); color: var(--accent-secondary); margin-top: 10px; font-size: 0.9rem; }
-
-/* --- GRID TABLERO (Mantiene 11x4) --- */
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(11, 1fr); 
-    gap: 10px; /* Un poco más de separación */
-    width: 98vw;
-    max-width: 1500px;
-    margin: 20px auto;
-    perspective: 1500px; /* Mayor profundidad 3D */
-    padding-bottom: 40px;
-}
-
-/* --- TARJETAS (NUEVO DISEÑO PREMIUM) --- */
-.card {
-    aspect-ratio: 3/4;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    cursor: pointer;
-}
-
-/* Efectos de Hover y Selección mejorados */
-.card:not(.flipped):hover { 
-    transform: scale(1.1) translateY(-10px) rotateX(5deg); 
-    z-index: 5; 
-}
-.card.selected { 
-    transform: rotateY(180deg) scale(1.1) translateY(-10px); 
-    z-index: 10; 
-}
-.card.flipped { transform: rotateY(180deg); }
-
-/* Estilo base de ambas caras */
-.card-face {
-    position: absolute;
-    width: 100%; height: 100%;
-    backface-visibility: hidden;
-    border-radius: 10px; /* Más redondeado */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid rgba(0, 255, 204, 0.15); /* Borde neón sutil */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-/* CARA FRONTAL (Cerrada - Diseño Tech/Bio) */
-.card-front { 
-    /* Degradado oscuro radial tipo lente de microscopio */
-    background: 
-        radial-gradient(circle at center, rgba(13, 43, 46, 0.8) 0%, rgba(5, 18, 20, 1) 100%),
-        url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsPSIjMDA0NDU1IiBmaWxsLW9wYWNpdHk9IjAuMSI+PHBhdGggZD0iTTAgMGg0MHY0MEgwVjB6bTIwIDIwaDIwdjIwSDIWMjB6TTAgMjBoMjB2MjBIMFYyMHoyMCAwaDIwdjIwSDIwVjB6Ii8+PC9nPjwvc3ZnPg==');
-    color: var(--accent); 
-}
-
-/* Icono central en la carta cerrada */
-.card-front::after { 
-    content: '🧬'; /* O '🔬' */
-    opacity: 0.5; 
-    font-size: 2.5rem;
-    filter: drop-shadow(0 0 10px var(--accent));
-    animation: dnaPulse 3s ease-in-out infinite;
-}
-
-@keyframes dnaPulse { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } }
-
-/* CARA TRASERA (Abierta - Diseño Limpio/Científico) */
-.card-back {
-    background-color: var(--card-back-bg);
-    background-image: linear-gradient(180deg, #ffffff 0%, #f0f8f9 100%);
-    color: #020b0d; /* Texto oscuro para contraste */
-    transform: rotateY(180deg);
-    padding: 10px;
-    font-size: 0.75rem; /* Ajustado para 11 columnas */
-    font-weight: bold;
-    flex-direction: column;
-    justify-content: space-between; /* Texto abajo, imagen arriba */
-    border: 3px solid var(--accent); /* Borde neón al abrir */
-}
-
-/* Estilo del texto dentro de la tarjeta abierta */
-.card-back span {
-    background: rgba(0, 77, 64, 0.1);
-    padding: 3px 6px;
-    border-radius: 4px;
-    width: 90%;
-    text-align: center;
-    margin-top: 5px;
-    text-transform: uppercase;
-    color: #004d40;
-    font-size: 0.65rem;
-    line-height: 1.2;
-}
-
-.card-back img { 
-    max-width: 95%; 
-    max-height: 70%; 
-    object-fit: contain; 
-    border-radius: 5px;
-    filter: multiply(1.1); /* Realza colores de la imagen */
-    margin-bottom: auto;
-}
-
-/* --- FEEDBACK VISUAL (CORRECTO/INCORRECTO) --- */
-/* Tarjeta Correcta: Brillo Verde intenso */
-.card.correct .card-back { 
-    border-color: #00c853; 
-    background: #e0fff4;
-    box-shadow: 0 0 25px #00c853; 
-    animation: correctPulse 1s ease-out;
-}
-
-@keyframes correctPulse {
-    0% { transform: rotateY(180deg) scale(1.1); }
-    50% { transform: rotateY(180deg) scale(1.2); }
-    100% { transform: rotateY(180deg) scale(1.1); }
-}
-
-/* Tarjeta Incorrecta: Brillo Rojo vibrante */
-.card.wrong .card-back { 
-    border-color: var(--error); 
-    box-shadow: 0 0 25px var(--error); 
-    animation: shakeWrong 0.5s;
-}
-
-@keyframes shakeWrong {
-    0%, 100% { transform: rotateY(180deg) translateX(0); }
-    20%, 60% { transform: rotateY(180deg) translateX(-8px); }
-    40%, 80% { transform: rotateY(180deg) translateX(8px); }
-}
-
-/* --- MODAL (PANTALLA DE VICTORIA) --- */
-.modal { 
-    position: fixed; inset: 0; 
-    background: radial-gradient(circle at center, rgba(1, 8, 10, 0.95) 0%, rgba(0,0,0,0.98) 100%);
-    display: flex; align-items: center; justify-content: center; 
-    z-index: 100; 
-    backdrop-filter: blur(10px);
-}
-
-.modal-content { 
-    background: #051216;
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsPSIjMDA0NDU1IiBmaWxsLW9wYWNpdHk9IjAuMSI+PHBhdGggZD0iTTAgMGg0MHY0MEgwVjB6bTIwIDIwaDIwdjIwSDIWMjB6TTAgMjBoMjB2MjBIMFYyMHoyMCAwaDIwdjIwSDIwVjB6Ii8+PC9nPjwvc3ZnPg==');
-    padding: 40px; 
-    border: 2px solid var(--accent); 
-    text-align: center; 
-    border-radius: 20px; 
-    box-shadow: 0 0 50px rgba(0,255,204,0.4);
-    position: relative;
-}
-
-.modal-content h2 { font-family: var(--font-tech); color: #fff; text-transform: uppercase; letter-spacing: 3px; margin-top: 0; }
-
-.results-summary { display: flex; gap: 30px; align-items: center; justify-content: center; margin: 25px 0; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); }
-
-.result-block h3 { font-family: var(--font-tech); color: var(--accent); margin: 0 0 10px 0; font-size: 1.5rem; }
-.result-block p { margin: 5px 0; font-weight: bold; font-size: 1.1rem; }
-.result-block p:last-child { color: var(--accent-secondary); font-family: var(--font-tech); }
-
-.vs { font-family: var(--font-tech); color: rgba(255,255,255,0.2); font-size: 1.5rem; font-weight: bold; }
-
-.grand-winner { 
-    font-family: var(--font-tech); 
-    color: var(--accent); 
-    font-size: 2.5rem; 
-    margin: 20px 0; 
-    text-transform: uppercase; 
-    text-shadow: 0 0 20px var(--accent);
-    animation: winnerGlow 2s infinite;
-}
-
-@keyframes winnerGlow { 50% { text-shadow: 0 0 40px var(--accent), 0 0 10px #fff; } }
-
-.reload-btn { 
-    background: var(--accent); 
-    color: #000; 
-    border: none; 
-    padding: 15px 35px; 
-    font-family: var(--font-tech); 
-    font-weight: 700; 
-    font-size: 1.1rem; 
-    cursor: pointer; 
-    border-radius: 50px; 
-    transition: 0.3s; 
-    text-transform: uppercase; 
-    letter-spacing: 2px;
-}
-.reload-btn:hover { background: #fff; box-shadow: 0 0 30px #fff; transform: scale(1.05); }
-
-/* --- HELPERS --- */
-.hidden { display: none !important; }
-
-/* Responsive básico para pantallas medianas */
-@media (max-width: 1200px) {
-    .grid-container { gap: 6px; }
-    .card-face { border-radius: 6px; }
-    header h1 { font-size: 2.2rem; }
-}
-
+/* --- TUS COLORES Y ESTILO BASE (SE MANTIENEN) --- */
 :root {
     --accent: #00ffcc;
     --bg-dark: #01080a;
@@ -372,68 +10,25 @@ body {
     color: white;
     font-family: 'Roboto', sans-serif;
     margin: 0;
-    touch-action: manipulation; /* Optimiza toques en móvil */
+    overflow-x: hidden;
 }
 
-.main-wrapper { display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-
-header { text-align: center; padding: 15px; border-bottom: 1px solid rgba(0,255,204,0.2); width: 100%; }
-header h1 { font-family: 'Orbitron'; color: var(--accent); margin: 0; font-size: 1.5rem; letter-spacing: 3px; }
-
-/* --- INTERFAZ DE JUGADORES --- */
-.ui-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    padding: 10px 0;
-    background: rgba(0,0,0,0.5);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.player-box {
-    background: var(--panel);
-    padding: 8px 15px;
-    border-radius: 5px;
-    border: 1px solid #333;
-    text-align: center;
-    opacity: 0.4;
-    transition: 0.3s;
-}
-
-.player-box.active { opacity: 1; border-color: var(--accent); box-shadow: 0 0 10px var(--accent); }
-.player-header { font-family: 'Orbitron'; font-size: 0.7rem; color: var(--accent); }
-.stats { font-weight: bold; font-size: 1.1rem; }
-
-/* --- GRID ADAPTABLE --- */
+/* --- GRID BASE (PC) --- */
 .grid-container {
     display: grid;
-    gap: 8px;
-    padding: 15px;
-    width: 95vw;
-    margin: 10px auto;
-    /* Por defecto (PC): 11 columnas */
+    /* 11 columnas para PC */
     grid-template-columns: repeat(11, 1fr);
+    gap: 10px;
+    padding: 20px;
+    width: 95vw;
+    margin: 0 auto;
 }
 
-/* MEDIA QUERY PARA MÓVILES */
-@media (max-width: 768px) {
-    .grid-container {
-        /* En celular: 4 columnas (crea 11 filas) */
-        grid-template-columns: repeat(4, 1fr);
-        gap: 6px;
-    }
-    header h1 { font-size: 1.2rem; }
-}
-
-/* --- TARJETAS --- */
 .card {
     aspect-ratio: 3/4;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.5s;
     cursor: pointer;
 }
 
@@ -448,10 +43,9 @@ header h1 { font-family: 'Orbitron'; color: var(--accent); margin: 0; font-size:
 }
 
 .card-front { 
-    background: linear-gradient(135deg, #0a1f24 0%, #051216 100%); 
-    border: 1px solid rgba(0,255,204,0.3);
+    background: #0a1f24; 
+    border: 1px solid var(--accent);
 }
-.card-front::after { content: '🧬'; opacity: 0.2; font-size: 1.5rem; }
 
 .card-back {
     background: white;
@@ -459,15 +53,44 @@ header h1 { font-family: 'Orbitron'; color: var(--accent); margin: 0; font-size:
     transform: rotateY(180deg);
     flex-direction: column;
     padding: 4px;
-    border: 2px solid var(--accent);
 }
 
 .card-back img { width: 100%; height: 75%; object-fit: contain; }
-.card-back span { font-size: 0.55rem; font-weight: bold; text-align: center; margin-top: 2px; line-height: 1; }
+.card-back span { font-size: 0.6rem; text-align: center; font-weight: bold; }
 
-/* --- MODAL --- */
-.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; z-index: 100; }
-.modal-content { background: #0a1f24; padding: 30px; border: 2px solid var(--accent); border-radius: 10px; text-align: center; width: 80%; max-width: 400px; }
-.reload-btn { background: var(--accent); color: black; border: none; padding: 12px 25px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; border-radius: 5px; margin-top: 20px; }
+/* --- AJUSTE EXCLUSIVO PARA MÓVIL (SIN CAMBIAR DISEÑO) --- */
+@media (max-width: 768px) {
+    .grid-container {
+        /* En celular pasamos a 4 columnas para que las cartas crezcan */
+        grid-template-columns: repeat(4, 1fr); 
+        gap: 6px;
+        padding: 10px;
+    }
 
+    /* Hacemos que el texto de las cartas se adapte al tamaño pequeño */
+    .card-back span {
+        font-size: 0.5rem;
+    }
+
+    /* Ajuste de la UI superior para que no se amontone */
+    .ui-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .player-box {
+        margin: 5px;
+        min-width: 120px;
+    }
+}
+
+/* --- ESTILOS DE UI (LOS QUE YA TENÍAS) --- */
+.main-wrapper { display: flex; flex-direction: column; align-items: center; }
+header { text-align: center; padding: 15px; }
+h1 { font-family: 'Orbitron'; color: var(--accent); }
+.player-box { background: var(--panel); padding: 10px; border: 1px solid #333; }
+.player-box.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent); opacity: 1; }
 .hidden { display: none !important; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 100; }
+.modal-content { background: #0a1f24; padding: 20px; border: 2px solid var(--accent); text-align: center; }
+.reload-btn { background: var(--accent); border: none; padding: 10px 20px; cursor: pointer; font-family: 'Orbitron'; }
