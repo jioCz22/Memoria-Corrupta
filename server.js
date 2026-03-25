@@ -9,6 +9,10 @@ const io = new Server(server);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 let rooms = {};
 
 io.on('connection', (socket) => {
@@ -20,11 +24,12 @@ io.on('connection', (socket) => {
                 players: [],
                 turn: 1,
                 flipped: [],
+                flippedIds: [],
                 lock: false
             };
         }
 
-        let room = rooms[roomCode];
+        const room = rooms[roomCode];
 
         if (room.players.length >= 2) {
             socket.emit('errorMsg', 'Sala llena');
@@ -34,7 +39,7 @@ io.on('connection', (socket) => {
         room.players.push(socket.id);
         socket.join(roomCode);
 
-        let playerNum = room.players.length;
+        const playerNum = room.players.length;
 
         socket.emit('playerAssigned', playerNum);
 
@@ -44,38 +49,47 @@ io.on('connection', (socket) => {
     });
 
     /* ========================= */
-    /* 🔥 CONTROL REAL DE JUEGO */
+    /* 🎮 CONTROL REAL DE JUEGO */
     /* ========================= */
-    socket.on('flipCard', ({ room: roomCode, cardIndex }) => {
+    socket.on('flipCard', ({ room: roomCode, cardIndex, cardId }) => {
 
-        let room = rooms[roomCode];
+        const room = rooms[roomCode];
         if (!room) return;
 
-        let playerIndex = room.players.indexOf(socket.id) + 1;
+        const playerIndex = room.players.indexOf(socket.id) + 1;
 
-        /* 🔒 VALIDACIONES */
         if (room.lock) return;
         if (playerIndex !== room.turn) return;
-
-        /* 📤 ENVIAR A TODOS */
-        io.to(roomCode).emit('flipCardGlobal', cardIndex);
+        if (room.flipped.includes(cardIndex)) return;
 
         room.flipped.push(cardIndex);
+        room.flippedIds.push(cardId);
+
+        io.to(roomCode).emit('flipCardGlobal', cardIndex);
 
         if (room.flipped.length === 2) {
+
             room.lock = true;
+
+            const isMatch = room.flippedIds[0] === room.flippedIds[1];
 
             setTimeout(() => {
 
-                /* 🔄 CAMBIO DE TURNO */
-                room.turn = room.turn === 1 ? 2 : 1;
+                io.to(roomCode).emit('matchResult', {
+                    indexes: room.flipped,
+                    match: isMatch
+                });
+
+                if (!isMatch) {
+                    room.turn = room.turn === 1 ? 2 : 1;
+                    io.to(roomCode).emit('nextTurn', room.turn);
+                }
 
                 room.flipped = [];
+                room.flippedIds = [];
                 room.lock = false;
 
-                io.to(roomCode).emit('nextTurn', room.turn);
-
-            }, 800);
+            }, 700);
         }
     });
 
