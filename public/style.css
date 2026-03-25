@@ -257,3 +257,54 @@ header p {
         transform: none;
     }
 }
+
+/* --- MODALES --- */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* 🔥 SOLUCIÓN CLAVE */
+}
+
+/* Contenido del modal */
+.modal-content {
+    background: #051216;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 320px;
+    max-width: 90%;
+    box-shadow: 0 0 20px rgba(0,255,204,0.3);
+}
+
+/* BOTONES BONITOS */
+.reload-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--font-tech);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.reload-btn:hover {
+    background: var(--accent);
+    color: #000;
+}
+
+/* INPUT */
+#input-room {
+    outline: none;
+}
+
+/* OCULTAR */
+.hidden {
+    display: none !important;
+}
