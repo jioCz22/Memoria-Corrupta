@@ -11,42 +11,43 @@
 <body>
 
     <div id="lobby-overlay">
-        <header>
+        <div class="lobby-content">
             <h1 class="glitch-text">LOS CORRUPTOS</h1>
-            <div class="lobby-controls">
+            <div class="lobby-box">
                 <button class="reload-btn" onclick="createRoom()">CREAR SALA</button>
-                <p>— O —</p>
+                <div class="divider">— O —</div>
                 <input type="text" id="input-room" placeholder="CÓDIGO" maxlength="6">
-                <button class="reload-btn" style="border-color:var(--accent2); color:var(--accent2);" onclick="joinRoom()">UNIRSE</button>
+                <button class="reload-btn btn-blue" onclick="joinRoom()">UNIRSE</button>
             </div>
+        </div>
+    </div>
+
+    <div id="game-ui" class="hidden">
+        <header class="game-header">
+            <h2>BIOLOGÍA</h2>
+            <p id="room-info">SALA: ----</p>
         </header>
-    </div>
 
-    <div class="game-header">
-        <h2 id="main-title">BIOLOGÍA</h2>
-        <p id="room-info">ESPERANDO SALA...</p>
-    </div>
+        <div class="ui-container">
+            <div id="p1-ui" class="player-box">
+                <div class="player-label">J1 🧬</div>
+                <div class="player-stats">
+                    Puntos: <span id="score1">0</span>
+                    <div class="timer" id="timer1">02:00</div>
+                </div>
+            </div>
 
-    <div class="ui-container">
-        <div id="p1-ui" class="player-box">
-            <div class="player-header">J1 🧬</div>
-            <div class="stats">
-                Puntos: <span id="score1">0</span>
-                <div class="timer-box">⏳ <span id="timer1">02:00</span></div>
+            <div id="p2-ui" class="player-box">
+                <div class="player-label">J2 🔬</div>
+                <div class="player-stats">
+                    Puntos: <span id="score2">0</span>
+                    <div class="timer" id="timer2">02:00</div>
+                </div>
             </div>
         </div>
 
-        <div id="p2-ui" class="player-box">
-            <div class="player-header">J2 🔬</div>
-            <div class="stats">
-                Puntos: <span id="score2">0</span>
-                <div class="timer-box">⏳ <span id="timer2">02:00</span></div>
-            </div>
-        </div>
+        <main id="game-board" class="grid-container"></main>
     </div>
-
-    <main id="game-board" class="grid-container hidden">
-        </main>
 
     <div id="win-modal" class="modal hidden">
         <div class="modal-content">

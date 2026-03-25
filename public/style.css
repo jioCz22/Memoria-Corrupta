@@ -1,190 +1,125 @@
-/* ========================= */
-/* 🎨 VARIABLES & BASE */
-/* ========================= */
 :root {
-    --bg-dark: #020b0d;
-    --bg-panel: rgba(10, 30, 35, 0.85);
+    --bg-dark: #010a0c;
     --accent: #00ffcc;
-    --accent-glow: rgba(0, 255, 204, 0.4);
-    --accent2: #0099ff;
-    --error: #ff3366;
+    --accent-glow: rgba(0, 255, 204, 0.3);
+    --panel-bg: rgba(6, 22, 26, 0.8);
     --text: #e0fbff;
-    --font-tech: 'Orbitron', sans-serif;
+    --error: #ff3366;
 }
 
 body {
-    margin: 0; padding: 0;
+    margin: 0;
     background: var(--bg-dark);
     color: var(--text);
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Orbitron', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     min-height: 100vh;
-    background-image: 
-        radial-gradient(circle at 50% 50%, #062129 0%, #01080a 100%),
-        linear-gradient(rgba(0, 255, 204, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px;
 }
 
 /* ========================= */
-/* 🧩 CONTROL DE VISIBILIDAD */
+/* 🏢 LOBBY CENTRADO         */
 /* ========================= */
-.hidden { display: none !important; }
-
-/* Ocultar UI de juego al inicio */
-#game-board, .ui-container {
-    display: none;
-}
-
-/* Mostrar cuando la clase .game-active esté en el body */
-body.game-active #game-board { display: grid; }
-body.game-active .ui-container { display: flex; }
-
-/* ========================= */
-/* 🏢 LOBBY & MODALES */
-/* ========================= */
-.modal {
+#lobby-overlay {
     position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.9);
-    display: flex; justify-content: center; align-items: center;
-    z-index: 100;
+    inset: 0;
+    background: radial-gradient(circle, #062129 0%, #01080a 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Asegura que esté arriba al inicio */
 }
 
-.modal-content {
-    background: var(--bg-panel);
-    padding: 40px;
+.lobby-content {
+    background: var(--panel-bg);
+    padding: 3rem;
     border: 2px solid var(--accent);
+    box-shadow: 0 0 30px var(--accent-glow);
     text-align: center;
+    border-radius: 10px;
     backdrop-filter: blur(10px);
 }
 
-.reload-btn {
-    background: transparent;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    padding: 10px 20px;
-    cursor: pointer;
-    font-family: var(--font-tech);
-    transition: 0.3s;
-    margin: 10px;
-}
-
-.reload-btn:hover { background: var(--accent); color: #000; }
-
-input#input-room {
-    background: rgba(0,0,0,0.5);
-    border: 1px solid var(--accent2);
-    color: white;
-    padding: 10px;
+/* ========================= */
+/* 🧬 UI DE JUEGO            */
+/* ========================= */
+.game-header {
     text-align: center;
-    font-family: var(--font-tech);
+    margin-top: 20px;
 }
 
-/* ========================= */
-/* 🧬 UI JUGADORES & CARTAS */
-/* ========================= */
-.ui-container { justify-content: center; gap: 20px; padding: 20px; }
+.ui-container {
+    display: none; /* Se activa con .game-active */
+    justify-content: center;
+    gap: 40px;
+    margin: 20px 0;
+    width: 100%;
+}
 
 .player-box {
-    padding: 15px;
-    border: 1px solid rgba(0,255,204,0.2);
-    min-width: 150px;
+    background: var(--panel-bg);
+    padding: 15px 30px;
+    border: 1px solid rgba(0, 255, 204, 0.1);
+    border-radius: 5px;
+    transition: 0.3s;
+    min-width: 180px;
     text-align: center;
-    transition: 0.4s;
 }
 
 .player-box.active {
     border-color: var(--accent);
-    box-shadow: 0 0 15px var(--accent-glow);
-    background: rgba(0, 255, 204, 0.1);
+    box-shadow: 0 0 20px var(--accent-glow);
+    transform: translateY(-5px);
 }
 
+/* ========================= */
+/* 🎮 TABLERO CENTRADO       */
+/* ========================= */
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 10px;
-    max-width: 1000px;
-    margin: auto;
-    padding: 20px;
+    display: none; /* Se activa con .game-active */
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 15px;
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto 40px;
+    perspective: 1000px;
 }
 
 .card {
     aspect-ratio: 3/4;
+    cursor: pointer;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.6s;
-    cursor: pointer;
+    transition: transform 0.5s;
 }
 
-.card.flipped { transform: rotateY(180deg); pointer-events: none; }
+.card.flipped {
+    transform: rotateY(180deg);
+}
 
 .card-face {
-    position: absolute; width: 100%; height: 100%;
+    position: absolute;
+    inset: 0;
     backface-visibility: hidden;
-    border-radius: 5px;
-    display: flex; justify-content: center; align-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.card-front { background: #0d2b2e; border: 1px solid var(--accent); }
-.card-front::after { content: "🧬"; font-size: 2rem; }
+.card-front {
+    background: linear-gradient(135deg, #0d2b2e, #051216);
+}
 
 .card-back {
-    background: white; transform: rotateY(180deg);
-    color: black; flex-direction: column; padding: 5px;
+    background: white;
+    transform: rotateY(180deg);
+    padding: 5px;
 }
 
-.card-back img { max-width: 90%; max-height: 80%; object-fit: contain; }
-.card-back span { font-size: 0.7rem; font-weight: bold; text-align: center; }
-
-/* Estado inicial: Ocultamos el tablero y los puntos */
-#game-board, .ui-container {
-    display: none !important;
-}
-
-/* Cuando la partida inicia, ocultamos el lobby y mostramos el juego */
-body.game-active #lobby-overlay, 
-body.game-active header { /* Si quieres ocultar el título superior también */
-    display: none !important;
-}
-
-body.game-active #game-board {
-    display: grid !important;
-}
-
-body.game-active .ui-container {
-    display: flex !important;
-}
-
-/* 1. Asegura que el Lobby sea visible al cargar la página */
-#lobby-overlay {
-    display: flex !important; /* Usamos flex para centrar el contenido */
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--bg-dark);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-/* 2. Oculta el juego y la UI mientras estemos en el lobby */
-.ui-container, #game-board, .game-header {
-    display: none !important;
-}
-
-/* 3. CUANDO EL JUEGO INICIA (Cambio de estado) */
-body.game-active #lobby-overlay {
-    display: none !important; /* Aquí es donde desaparece el menú */
-}
-
-body.game-active .ui-container {
-    display: flex !important;
-}
-
-body.game-active #game-board {
-    display: grid !important;
-}
-
-body.game-active .game-header {
-    display: block !important;
-}
+/* CONTROL DE ESTADOS */
+body.game-active #lobby-overlay { display: none !important; }
+body.game-active .ui-container { display: flex; }
+body.game-active .grid-container { display: grid; }
