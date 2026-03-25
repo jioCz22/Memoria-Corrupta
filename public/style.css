@@ -1,125 +1,245 @@
 :root {
-    --bg-dark: #010a0c;
-    --accent: #00ffcc;
-    --accent-glow: rgba(0, 255, 204, 0.3);
-    --panel-bg: rgba(6, 22, 26, 0.8);
-    --text: #e0fbff;
-    --error: #ff3366;
+    --bg: #f8fafc;           /* Fondo gris muy claro */
+    --text: #1e293b;         /* Texto azul oscuro/gris */
+    --primary: #3b82f6;      /* Azul moderno */
+    --accent: #10b981;       /* Verde para aciertos/código */
+    --error: #ef4444;        /* Rojo para errores/tiempo bajo */
+    --card-bg: #ffffff;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 body {
     margin: 0;
-    background: var(--bg-dark);
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--bg);
     color: var(--text);
-    font-family: 'Orbitron', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
 }
 
+.hidden { display: none !important; }
+
 /* ========================= */
-/* 🏢 LOBBY CENTRADO         */
+/* 🏢 LOBBY MINIMALISTA      */
 /* ========================= */
 #lobby-overlay {
     position: fixed;
     inset: 0;
-    background: radial-gradient(circle, #062129 0%, #01080a 100%);
+    background: var(--bg);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Asegura que esté arriba al inicio */
+    z-index: 1000;
 }
 
-.lobby-content {
-    background: var(--panel-bg);
-    padding: 3rem;
-    border: 2px solid var(--accent);
-    box-shadow: 0 0 30px var(--accent-glow);
+.lobby-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
     text-align: center;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
+    width: 90%;
+    max-width: 400px;
 }
+
+.lobby-card h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.join-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-secondary { background: #e2e8f0; color: var(--text); }
 
 /* ========================= */
-/* 🧬 UI DE JUEGO            */
+/* 📊 BARRA DE ESTADO (TOP)  */
 /* ========================= */
-.game-header {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.ui-container {
-    display: none; /* Se activa con .game-active */
-    justify-content: center;
-    gap: 40px;
-    margin: 20px 0;
+.status-bar {
     width: 100%;
+    background: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 500;
 }
 
-.player-box {
-    background: var(--panel-bg);
-    padding: 15px 30px;
-    border: 1px solid rgba(0, 255, 204, 0.1);
-    border-radius: 5px;
+.player-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.4;
     transition: 0.3s;
-    min-width: 180px;
-    text-align: center;
 }
 
-.player-box.active {
-    border-color: var(--accent);
-    box-shadow: 0 0 20px var(--accent-glow);
-    transform: translateY(-5px);
+.player-info.active {
+    opacity: 1;
+    color: var(--primary);
 }
+
+.score { font-size: 1.25rem; font-weight: 800; }
+.timer { font-family: monospace; font-size: 1rem; font-weight: 700; }
+
+.room-display {
+    text-align: center;
+    background: #f1f5f9;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.room-label { font-size: 0.6rem; color: var(--secondary); display: block; }
+.room-code { font-weight: 800; color: var(--accent); letter-spacing: 1px; }
 
 /* ========================= */
-/* 🎮 TABLERO CENTRADO       */
+/* 🎮 TABLERO Y CARTAS       */
 /* ========================= */
 .grid-container {
-    display: none; /* Se activa con .game-active */
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    gap: 15px;
-    width: 90%;
-    max-width: 1100px;
-    margin: 0 auto 40px;
-    perspective: 1000px;
+    display: grid;
+    /* 4 columnas en móvil, hasta 6 u 8 en PC */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 15px;
+    width: 100%;
+    max-width: 900px;
+    box-sizing: border-box;
 }
 
 .card {
-    aspect-ratio: 3/4;
-    cursor: pointer;
+    aspect-ratio: 1 / 1; /* Cartas cuadradas para que la imagen se vea mejor */
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.5s;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.card.flipped {
-    transform: rotateY(180deg);
-}
+.card.flipped { transform: rotateY(180deg); }
 
 .card-face {
     position: absolute;
     inset: 0;
     backface-visibility: hidden;
     border-radius: 8px;
-    border: 1px solid var(--accent);
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden; /* Importante para las imágenes */
+    border: 2px solid transparent;
 }
 
 .card-front {
-    background: linear-gradient(135deg, #0d2b2e, #051216);
+    background: var(--primary);
+    box-shadow: var(--shadow);
 }
 
 .card-back {
     background: white;
     transform: rotateY(180deg);
-    padding: 5px;
+    border-color: var(--primary);
 }
 
-/* CONTROL DE ESTADOS */
-body.game-active #lobby-overlay { display: none !important; }
-body.game-active .ui-container { display: flex; }
-body.game-active .grid-container { display: grid; }
+/* 🖼️ ESTILO DE IMÁGENES DENTRO DE CARTAS */
+.card-back img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Muestra la imagen completa sin recortar */
+    background: #fff;
+}
+
+.card-back span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 4px;
+    word-break: break-word;
+}
+
+.card.correct .card-back {
+    border-color: var(--accent);
+    background: #ecfdf5;
+}
+
+/* ========================= */
+/* 📱 AJUSTES PARA MÓVIL     */
+/* ========================= */
+@media (max-width: 480px) {
+    .grid-container {
+        grid-template-columns: repeat(4, 1fr); /* 4 columnas fijas en móvil */
+        gap: 6px;
+        padding: 10px;
+    }
+    
+    .status-bar {
+        padding: 0.5rem;
+    }
+
+    .room-display {
+        padding: 0.3rem 0.5rem;
+    }
+
+    .card-back span {
+        font-size: 0.6rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .grid-container {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    .card { aspect-ratio: 3/4; } /* En PC pueden ser más altas */
+}
+
+/* ========================= */
+/* 🏆 MODAL DE VICTORIA      */
+/* ========================= */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    max-width: 300px;
+}
