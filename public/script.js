@@ -3,43 +3,21 @@ const socket = io();
 let roomCode = "";
 let myPlayerNum = 0;
 let isMyTurn = false;
-
 let currentPlayer = 1;
 let scores = [0, 0];
-let flippedCards = [];
 let lockBoard = false;
 
-/* ========================= */
-/* 🔗 LOBBY */
-/* ========================= */
+// Tiempos individuales (120 segundos = 2 minutos)
+let timers = [120, 120]; 
+let countdownInterval;
 
-// Creamos los botones de lobby dinámicamente si no están en el HTML
-window.onload = () => {
-    const lobbyDiv = document.createElement('div');
-    lobbyDiv.id = "lobby-overlay";
-    lobbyDiv.innerHTML = `
-    <div class="modal" id="lobby-modal">
-        <div class="modal-content">
-            <h2 class="glitch-text">LOS CORRUPTOS</h2>
-            
-            <button class="reload-btn" onclick="createRoom()">CREAR SALA</button>
-            
-            <p style="margin:10px 0; opacity:0.5;">— O —</p>
-            
-            <input type="text" id="input-room" placeholder="CÓDIGO" maxlength="6">
-            
-            <button class="reload-btn" 
-                    style="border-color:var(--accent2); color:var(--accent2);" 
-                    onclick="joinRoom()">UNIRSE</button>
-        </div>
-    </div>
-`;
-    if(!document.getElementById('input-room')) document.body.prepend(lobbyDiv);
-};
+/* ========================= */
+/* 🔗 GESTIÓN DE SALAS */
+/* ========================= */
 
 function createRoom() {
     roomCode = Math.random().toString(36).substring(2, 7).toUpperCase();
-    alert("Código de sala: " + roomCode);
+    alert("CÓDIGO DE SALA: " + roomCode);
     socket.emit('joinRoom', roomCode);
 }
 
@@ -51,17 +29,56 @@ function joinRoom() {
 
 socket.on('playerAssigned', (num) => {
     myPlayerNum = num;
-    isMyTurn = (num === 1);
     document.getElementById('lobby-overlay').classList.add('hidden');
-    document.getElementById('room-info').textContent = "SALA: " + roomCode;
+    document.getElementById('room-info').textContent = "ESPERANDO AL OPONENTE...";
 });
 
 socket.on('initGame', () => {
+    document.body.classList.add('game-active');
+    document.getElementById('room-info').textContent = "SALA: " + roomCode;
     startGame();
+    startGlobalTimer();
 });
 
 /* ========================= */
-/* 🧠 DATA */
+/* ⏳ SISTEMA DE TIEMPO */
+/* ========================= */
+
+function startGlobalTimer() {
+    if(countdownInterval) clearInterval(countdownInterval);
+    
+    countdownInterval = setInterval(() => {
+        // Solo descuenta al jugador cuyo turno esté activo
+        timers[currentPlayer - 1]--;
+        
+        updateTimerUI();
+        
+        if(timers[currentPlayer - 1] <= 0) {
+            endGame(`TIEMPO AGOTADO - GANADOR J${currentPlayer === 1 ? 2 : 1}`);
+        }
+    }, 1000);
+}
+
+function updateTimerUI() {
+    const format = (s) => {
+        const min = Math.floor(s / 60);
+        const seg = s % 60;
+        return `${min}:${seg.toString().padStart(2, '0')}`;
+    };
+
+    const t1 = document.getElementById('timer1');
+    const t2 = document.getElementById('timer2');
+    
+    t1.textContent = format(timers[0]);
+    t2.textContent = format(timers[1]);
+
+    // Alerta visual si queda poco tiempo
+    t1.style.color = timers[0] < 15 ? "var(--error)" : "white";
+    t2.style.color = timers[1] < 15 ? "var(--error)" : "white";
+}
+
+/* ========================= */
+/* 🎮 LÓGICA DEL JUEGO */
 /* ========================= */
 
 const rawData = [
@@ -89,22 +106,17 @@ const rawData = [
     { id: 22, text: "3ra Ley", img: "/img/ley3.jpg" }
 ];
 
-/* ========================= */
-/* 🎮 GAME */
-/* ========================= */
-
 function startGame() {
     const board = document.getElementById('game-board');
     board.innerHTML = "";
-    board.classList.remove('hidden');
-
+    
     let deck = [];
     rawData.forEach(item => {
         deck.push({ id: item.id, content: item.text, type: 'text' });
         deck.push({ id: item.id, content: item.img, type: 'img' });
     });
 
-    // MEZCLA SINCRONIZADA (Basada en el código de sala)
+    // Mezcla sincronizada por código de sala
     let seed = roomCode.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
     const seededRandom = () => {
         seed = (seed * 9301 + 49297) % 233280;
@@ -122,67 +134,41 @@ function startGame() {
         card.dataset.id = data.id;
         card.innerHTML = `
             <div class="card-face card-front"></div>
-            <div class="card-face card-back">
-                ${data.type === 'img' 
-                    ? `<img src="${data.content}" loading="lazy">` 
-                    : `<span>${data.content}</span>`}
+            <div class="card-back card-face">
+                ${data.type === 'img' ? `<img src="${data.content}">` : `<span>${data.content}</span>`}
             </div>
         `;
-        card.onclick = () => handleClick(card, index);
+        card.onclick = () => {
+            if (!isMyTurn || lockBoard || card.classList.contains('flipped')) return;
+            socket.emit('flipCard', { room: roomCode, cardIndex: index, cardId: card.dataset.id });
+        };
         board.appendChild(card);
     });
 }
 
-function handleClick(card, index) {
-    if (!isMyTurn || lockBoard || card.classList.contains('flipped')) return;
-
-    socket.emit('flipCard', {
-        room: roomCode,
-        cardIndex: index,
-        cardId: card.dataset.id
-    });
-}
-
-/* ========================= */
-/* 🔄 SYNC SOCKETS */
-/* ========================= */
-
 socket.on('flipCardGlobal', (index) => {
     const cards = document.querySelectorAll('.card');
-    const card = cards[index];
-    if (!card) return;
-    card.classList.add('flipped');
+    cards[index].classList.add('flipped');
 });
 
-// AQUÍ ESTÁ TU BLOQUE ACTUALIZADO Y COMPLETO
 socket.on('matchResult', ({ indexes, match }) => {
     const cards = document.querySelectorAll('.card');
     const [c1, c2] = indexes.map(i => cards[i]);
 
-    if (!c1 || !c2) return;
-
     if (match) {
-        // Efecto visual de acierto
-        c1.classList.add('correct', 'flipped');
-        c2.classList.add('correct', 'flipped');
-        
-        // Sumar puntos al jugador actual
+        c1.classList.add('correct');
+        c2.classList.add('correct');
         scores[currentPlayer - 1]++;
-        const scoreElement = document.getElementById(`score${currentPlayer}`);
-        if(scoreElement) scoreElement.textContent = scores[currentPlayer - 1];
+        document.getElementById(`score${currentPlayer}`).textContent = scores[currentPlayer - 1];
         
-        // Verificar si terminó el juego (22 pares)
-        const totalFound = scores[0] + scores[1];
-        if(totalFound === 22) {
-            document.getElementById('win-modal').classList.remove('hidden');
-            document.getElementById('grand-winner-name').textContent = 
-                scores[0] > scores[1] ? "GANADOR: J1" : "GANADOR: J2";
+        if (scores[0] + scores[1] === 22) {
+            const winner = scores[0] > scores[1] ? "GANADOR: J1" : "GANADOR: J2";
+            endGame(winner);
         }
     } else {
         lockBoard = true;
         c1.classList.add('wrong');
         c2.classList.add('wrong');
-        
         setTimeout(() => {
             c1.classList.remove('flipped', 'wrong');
             c2.classList.remove('flipped', 'wrong');
@@ -194,8 +180,12 @@ socket.on('matchResult', ({ indexes, match }) => {
 socket.on('nextTurn', (turn) => {
     currentPlayer = turn;
     isMyTurn = (turn === myPlayerNum);
-
     document.querySelectorAll('.player-box').forEach(b => b.classList.remove('active'));
-    const activeBox = document.getElementById(`p${turn}-ui`);
-    if(activeBox) activeBox.classList.add('active');
+    document.getElementById(`p${turn}-ui`).classList.add('active');
 });
+
+function endGame(msg) {
+    clearInterval(countdownInterval);
+    document.getElementById('win-modal').classList.remove('hidden');
+    document.getElementById('grand-winner-name').textContent = msg;
+}
