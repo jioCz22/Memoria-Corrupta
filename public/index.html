@@ -1,52 +1,95 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Biologia - Memorama</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="bio-background"></div>
-    <script src="/socket.io/socket.io.js"></script>
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const path = require('path');
 
-    <div class="main-wrapper">
-        <header>
-            <h1 class="glitch" data-text="BIOGENIX 3D">BIOLOGIA</h1>
-            <p id="room-info">Nosotros le sabemos profe</p>
-        </header>
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
-        <div class="ui-container">
-            <div class="player-box p1 active" id="p1-ui">
-                <div class="player-header">J1 🧬</div>
-                <div class="stats">
-                    <span id="score1">0</span> | <span class="timer" id="timer1">00:00</span>
-                </div>
-            </div>
-            
-            <div class="center-ui">
-                <div id="game-info" class="hidden">🔬 <span id="pairs-left">22</span></div>
-            </div>
+app.use(express.static(path.join(__dirname, 'public')));
 
-            <div class="player-box p2" id="p2-ui">
-                <div class="player-header">J2 🔬</div>
-                <div class="stats">
-                    <span id="score2">0</span> | <span class="timer" id="timer2">00:00</span>
-                </div>
-            </div>
-        </div>
+let rooms = {};
 
-        <main id="game-board" class="grid-container hidden"></main>
-    </div>
+io.on('connection', (socket) => {
 
-    <div id="win-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2 id="grand-winner-name">COMPLETADA</h2>
-            <button class="reload-btn" onclick="location.reload()">REINTENTAR</button>
-        </div>
-    </div>
+    socket.on('joinRoom', (roomCode) => {
 
-    <script src="script.js"></script>
-</body>
-</html>
+        if (!rooms[roomCode]) {
+            rooms[roomCode] = {
+                players: [],
+                turn: 1,
+                flipped: [],
+                lock: false
+            };
+        }
+
+        let room = rooms[roomCode];
+
+        if (room.players.length >= 2) {
+            socket.emit('errorMsg', 'Sala llena');
+            return;
+        }
+
+        room.players.push(socket.id);
+        socket.join(roomCode);
+
+        let playerNum = room.players.length;
+
+        socket.emit('playerAssigned', playerNum);
+
+        if (room.players.length === 2) {
+            io.to(roomCode).emit('initGame');
+        }
+    });
+
+    /* ========================= */
+    /* 🔥 CONTROL REAL DE JUEGO */
+    /* ========================= */
+    socket.on('flipCard', ({ room: roomCode, cardIndex }) => {
+
+        let room = rooms[roomCode];
+        if (!room) return;
+
+        let playerIndex = room.players.indexOf(socket.id) + 1;
+
+        /* 🔒 VALIDACIONES */
+        if (room.lock) return;
+        if (playerIndex !== room.turn) return;
+
+        /* 📤 ENVIAR A TODOS */
+        io.to(roomCode).emit('flipCardGlobal', cardIndex);
+
+        room.flipped.push(cardIndex);
+
+        if (room.flipped.length === 2) {
+            room.lock = true;
+
+            setTimeout(() => {
+
+                /* 🔄 CAMBIO DE TURNO */
+                room.turn = room.turn === 1 ? 2 : 1;
+
+                room.flipped = [];
+                room.lock = false;
+
+                io.to(roomCode).emit('nextTurn', room.turn);
+
+            }, 800);
+        }
+    });
+
+    socket.on('disconnect', () => {
+        for (let roomCode in rooms) {
+            let room = rooms[roomCode];
+            room.players = room.players.filter(id => id !== socket.id);
+
+            if (room.players.length === 0) {
+                delete rooms[roomCode];
+            }
+        }
+    });
+});
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => console.log("Servidor activo en " + PORT));
