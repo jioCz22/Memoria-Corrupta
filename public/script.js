@@ -20,7 +20,7 @@ window.onload = () => {
     lobbyDiv.innerHTML = `
         <div class="modal" id="lobby-modal">
             <div class="modal-content">
-                <h2 style="font-family:'Orbitron'; color:var(--accent)">BIO-LINK ONLINE</h2>
+                <h2 style="font-family:'Orbitron'; color:var(--accent)">LOS CORRUPTOS</h2>
                 <button class="reload-btn" onclick="createRoom()">CREAR SALA</button>
                 <p style="margin:15px 0">--- O ---</p>
                 <input type="text" id="input-room" placeholder="CÓDIGO">
