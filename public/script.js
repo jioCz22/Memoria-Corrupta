@@ -18,16 +18,22 @@ window.onload = () => {
     const lobbyDiv = document.createElement('div');
     lobbyDiv.id = "lobby-overlay";
     lobbyDiv.innerHTML = `
-        <div class="modal" id="lobby-modal">
-            <div class="modal-content">
-                <h2 style="font-family:'Orbitron'; color:var(--accent)">LOS CORRUPTOS</h2>
-                <button class="reload-btn" onclick="createRoom()">CREAR SALA</button>
-                <p style="margin:15px 0">--- O ---</p>
-                <input type="text" id="input-room" placeholder="CÓDIGO">
-                <button class="reload-btn" style="border-color:var(--accent2); color:var(--accent2)" onclick="joinRoom()">UNIRSE</button>
-            </div>
+    <div class="modal" id="lobby-modal">
+        <div class="modal-content">
+            <h2 class="glitch-text">LOS CORRUPTOS</h2>
+            
+            <button class="reload-btn" onclick="createRoom()">CREAR SALA</button>
+            
+            <p style="margin:10px 0; opacity:0.5;">— O —</p>
+            
+            <input type="text" id="input-room" placeholder="CÓDIGO" maxlength="6">
+            
+            <button class="reload-btn" 
+                    style="border-color:var(--accent2); color:var(--accent2);" 
+                    onclick="joinRoom()">UNIRSE</button>
         </div>
-    `;
+    </div>
+`;
     if(!document.getElementById('input-room')) document.body.prepend(lobbyDiv);
 };
 
