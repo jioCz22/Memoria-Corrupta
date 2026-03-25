@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memoria Corrompida</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bio-background"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <div class="main-wrapper">
+        <header>
+            <h1 class="glitch" data-text="BIOGENIX 3D">Biologia - Memorama</h1>
+            <p>Juego Para Hackearte</p>
+        </header>
+
+        <div class="ui-container">
+            <div class="player-box p1 active" id="p1-ui">
+                <div class="player-header"><span>🧬</span> JUGADOR 1</div>
+                <div class="stats">
+                    <div class="stat-item"><span class="label">Pares:</span> <span class="value" id="score1">0</span></div>
+                    <div class="stat-item"><span class="label">Tiempo:</span> <span class="value timer" id="timer1">00:00</span></div>
+                </div>
+                <div class="turn-indicator">SU TURNO</div>
+            </div>
+            
+            <div class="center-ui">
+                <button id="start-btn" class="hidden">INICIAR</button>
+                <div id="game-info" class="hidden">Restantes: <span id="pairs-left">22</span></div>
+            </div>
+
+            <div class="player-box p2" id="p2-ui">
+                <div class="player-header"><span>🔬</span> JUGADOR 2</div>
+                <div class="stats">
+                    <div class="stat-item"><span class="label">Pares:</span> <span class="value" id="score2">0</span></div>
+                    <div class="stat-item"><span class="label">Tiempo:</span> <span class="value timer" id="timer2">00:00</span></div>
+                </div>
+                <div class="turn-indicator">SU TURNO</div>
+            </div>
+        </div>
+
+        <main id="game-board" class="grid-container hidden"></main>
+    </div>
+
+    <div id="win-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>SECUENCIA COMPLETADA</h2>
+            <div class="results-summary">
+                <div class="result-block"><h3>J1</h3><p id="final-score1"></p><p id="final-time1"></p></div>
+                <div class="vs">VS</div>
+                <div class="result-block"><h3>J2</h3><p id="final-score2"></p><p id="final-time2"></p></div>
+            </div>
+            <h1 class="grand-winner" id="grand-winner-name"></h1>
+            <button class="reload-btn" onclick="location.reload()">NUEVA PARTIDA</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
