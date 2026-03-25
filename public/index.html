@@ -1,47 +1,94 @@
 <!DOCTYPE html>
+
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>LOS CORRUPTOS | Bio-Game</title>
+
     <link rel="stylesheet" href="style.css">
+
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
     <script src="/socket.io/socket.io.js"></script>
+
 </head>
+
 <body>
 
+
+
     <header>
+
         <h1 id="main-title">BIOLOGÍA</h1>
+
         <p id="room-info">ESPERANDO SALA...</p>
+
     </header>
 
+
+
     <div class="ui-container">
+
         <div id="p1-ui" class="player-box">
+
             <div class="player-header">J1 🧬</div>
+
             <div class="stats">
+
                 Puntos: <span id="score1">0</span> | <span id="timer1">00:00</span>
+
             </div>
+
         </div>
+
+
 
         <div id="p2-ui" class="player-box">
+
             <div class="player-header">J2 🔬</div>
+
             <div class="stats">
+
                 Puntos: <span id="score2">0</span> | <span id="timer2">00:00</span>
+
             </div>
+
         </div>
+
     </div>
+
+
 
     <main id="game-board" class="grid-container hidden">
+
         </main>
 
+
+
     <div id="win-modal" class="modal hidden">
+
         <div class="modal-content">
+
             <h2 class="glitch-text">SISTEMA RESTAURADO</h2>
+
             <p id="grand-winner-name">GANADOR: --</p>
+
             <button class="reload-btn" onclick="location.reload()">REINICIAR</button>
+
         </div>
+
     </div>
 
+
+
     <script src="script.js"></script>
+
 </body>
+
 </html>
+

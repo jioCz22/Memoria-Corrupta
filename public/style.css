@@ -1,408 +1,817 @@
+
+
 /* ========================= */
+
 /* 🎨 VARIABLES MODERNIZADAS */
+
 /* ========================= */
+
 :root {
+
     --bg-dark: #020b0d;
+
     --bg-panel: rgba(10, 30, 35, 0.75);
+
     --accent: #00ffcc; /* Verde neón */
+
     --accent-glow: rgba(0, 255, 204, 0.4);
+
     --accent2: #0099ff; /* Azul tech */
+
     --error: #ff3366;
+
     --text: #e0fbff;
+
     --card-bg: #0d2b2e;
+
     --font-tech: 'Orbitron', sans-serif;
+
     --font-body: 'Roboto', sans-serif;
+
 }
 
+
+
 /* ========================= */
+
 /* BASE & FONDO DINÁMICO */
-/* ========================= */
-body {
-    margin: 0;
-    padding: 0;
-    background: var(--bg-dark);
-    color: var(--text);
-    font-family: var(--font-body);
-    overflow-x: hidden;
-    min-height: 100vh;
-    /* Fondo con textura de red sutil */
-    background-image: 
-        radial-gradient(circle at 50% 50%, #062129 0%, #01080a 100%),
-        linear-gradient(rgba(0, 255, 204, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px;
-}
 
 /* ========================= */
-/* HEADER REFINADO */
-/* ========================= */
-header {
-    text-align: center;
-    padding: 25px 15px;
-    background: linear-gradient(to bottom, rgba(0,255,204,0.1), transparent);
+
+body {
+
+    margin: 0;
+
+    padding: 0;
+
+    background: var(--bg-dark);
+
+    color: var(--text);
+
+    font-family: var(--font-body);
+
+    overflow-x: hidden;
+
+    min-height: 100vh;
+
+    /* Fondo con textura de red sutil */
+
+    background-image:
+
+        radial-gradient(circle at 50% 50%, #062129 0%, #01080a 100%),
+
+        linear-gradient(rgba(0, 255, 204, 0.05) 1px, transparent 1px),
+
+        linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
+
+    background-size: 100% 100%, 40px 40px, 40px 40px;
+
 }
+
+
+
+/* ========================= */
+
+/* HEADER REFINADO */
+
+/* ========================= */
+
+header {
+
+    text-align: center;
+
+    padding: 25px 15px;
+
+    background: linear-gradient(to bottom, rgba(0,255,204,0.1), transparent);
+
+}
+
+
 
 header h1 {
+
     font-family: var(--font-tech);
+
     color: var(--accent);
+
     font-size: clamp(1.8rem, 5vw, 3rem); /* Tamaño fluido */
+
     margin: 0;
+
     letter-spacing: 4px;
+
     text-shadow: 0 0 15px var(--accent-glow);
+
 }
+
+
 
 header p {
+
     color: var(--accent2);
+
     font-size: 0.85rem;
+
     text-transform: uppercase;
+
     letter-spacing: 2px;
+
     margin-top: 5px;
+
 }
 
+
+
 /* ========================= */
+
 /* UI - PANELES DE JUGADORES (GLASSMORPHISM) */
+
 /* ========================= */
+
 .ui-container {
+
     display: flex;
+
     justify-content: center;
+
     align-items: center;
+
     gap: 20px;
+
     padding: 15px;
+
     flex-wrap: wrap;
+
 }
+
+
 
 .player-box {
+
     background: var(--bg-panel);
+
     backdrop-filter: blur(8px); /* Efecto cristal */
+
     padding: 15px 25px;
+
     border-radius: 4px;
+
     border: 1px solid rgba(0, 255, 204, 0.1);
+
     text-align: center;
+
     min-width: 140px;
+
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
     position: relative;
+
     clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); /* Diseño asimétrico */
+
 }
+
+
 
 .player-box.active {
+
     opacity: 1;
+
     border-color: var(--accent);
+
     box-shadow: 0 0 20px var(--accent-glow);
+
     transform: translateY(-5px) scale(1.05);
+
     background: rgba(0, 255, 204, 0.15);
+
 }
+
+
 
 .player-header {
+
     font-family: var(--font-tech);
+
     color: var(--accent);
+
     font-size: 1.1rem;
+
     margin-bottom: 3px;
+
 }
+
+
 
 .stats {
+
     font-size: 1.2rem;
+
     font-weight: bold;
+
     color: #fff;
+
 }
 
+
+
 /* ========================= */
+
 /* GRID AUTO-AJUSTABLE */
+
 /* ========================= */
+
 .grid-container {
+
     display: grid;
+
     /* Esto ajusta el número de columnas automáticamente según el ancho */
+
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+
     gap: 12px;
+
     width: 95vw;
+
     max-width: 1200px;
+
     margin: 10px auto 40px;
+
     padding: 10px;
+
 }
+
+
 
 /* Ajuste específico para pantallas muy grandes (PC) */
+
 @media (min-width: 1200px) {
+
     .grid-container {
+
         grid-template-columns: repeat(11, 1fr);
+
     }
+
 }
 
+
+
 /* ========================= */
+
 /* TARJETAS (CARTAS) MEJORADAS */
+
 /* ========================= */
+
 .card {
+
     aspect-ratio: 3/4;
+
     position: relative;
+
     transform-style: preserve-3d;
+
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
     cursor: pointer;
+
 }
+
+
 
 .card:hover {
+
     filter: brightness(1.2);
+
 }
 
+
+
 .card.flipped {
+
     transform: rotateY(180deg);
+
 }
+
+
 
 .card-face {
+
     position: absolute;
+
     width: 100%;
+
     height: 100%;
+
     border-radius: 8px;
+
     backface-visibility: hidden;
+
     display: flex;
+
     justify-content: center;
+
     align-items: center;
+
     border: 1px solid rgba(0, 255, 204, 0.3);
+
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+
 }
+
+
 
 /* Frente (Cerrada) */
+
 .card-front {
+
     background: linear-gradient(135deg, #0d2b2e 0%, #051216 100%);
+
 }
+
+
 
 .card-front::after {
+
     content: "🧬";
+
     font-size: 2.2rem;
+
     filter: drop-shadow(0 0 8px var(--accent));
+
 }
+
+
 
 /* Atrás (Abierta) */
+
 .card-back {
+
     background: #ffffff;
+
     color: #000;
+
     transform: rotateY(180deg);
+
     padding: 10px;
+
     flex-direction: column;
+
     justify-content: space-between;
+
 }
+
+
 
 .card-back img {
+
     max-width: 100%;
+
     max-height: 75%;
+
     object-fit: contain;
+
     border-radius: 4px;
+
 }
+
+
 
 .card-back span {
+
     font-family: var(--font-tech);
+
     font-size: 0.7rem;
+
     font-weight: bold;
+
     color: #051216;
+
     text-align: center;
+
     line-height: 1;
+
 }
 
+
+
 /* ========================= */
+
 /* ANIMACIONES DE RESULTADO */
+
 /* ========================= */
+
 .card.correct {
+
     animation: success-glow 0.5s ease forwards;
+
 }
+
+
 
 @keyframes success-glow {
+
     0% { transform: rotateY(180deg) scale(1); }
+
     50% { transform: rotateY(180deg) scale(1.1); box-shadow: 0 0 25px #00ff88; }
+
     100% { transform: rotateY(180deg) scale(1); box-shadow: 0 0 10px #00ff88; }
+
 }
+
+
 
 .card.wrong {
+
     animation: error-shake 0.4s linear;
+
 }
+
+
 
 @keyframes error-shake {
+
     0%, 100% { transform: rotateY(180deg) translateX(0); }
+
     25% { transform: rotateY(180deg) translateX(-8px); border-color: var(--error); }
+
     75% { transform: rotateY(180deg) translateX(8px); border-color: var(--error); }
+
 }
 
+
+
 /* ========================= */
+
 /* MODALES Y BOTONES */
+
 /* ========================= */
+
 .modal-content {
+
     background: var(--bg-panel);
+
     backdrop-filter: blur(15px);
+
     border: 2px solid var(--accent);
+
     padding: 30px;
+
     border-radius: 5px; /* Más cuadrado para estilo tech */
+
     box-shadow: 0 0 40px rgba(0, 255, 204, 0.2);
+
 }
+
+
 
 .reload-btn {
+
     border: 1px solid var(--accent);
+
     text-transform: uppercase;
+
     letter-spacing: 2px;
+
     font-weight: bold;
+
     margin-top: 15px;
+
     transition: 0.4s;
+
 }
+
+
 
 .reload-btn:hover {
+
     background: var(--accent);
+
     color: #000;
+
     box-shadow: 0 0 20px var(--accent);
+
 }
 
+
+
 /* ========================= */
+
 /* 📱 AJUSTES RESPONSIVE MÓVIL */
+
 /* ========================= */
+
 @media (max-width: 600px) {
+
     .grid-container {
+
         grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+
         gap: 8px;
+
         padding: 5px;
+
     }
+
+
 
     .player-box {
+
         min-width: 110px;
+
         padding: 10px;
+
     }
+
+
 
     .card-front::after {
+
         font-size: 1.6rem;
+
     }
+
+
 
     .card-back span {
+
         font-size: 0.6rem;
+
     }
+
 }
+
+
 
 /* Solución para que las imágenes no se vean mal en móviles pequeños */
+
 @media (max-width: 360px) {
+
     .grid-container {
+
         grid-template-columns: repeat(3, 1fr);
+
     }
+
 }
 
 
+
+
+
 /* ========================= */
+
 /* AJUSTE DE BOTONES E INPUTS */
+
 /* ========================= */
+
+
 
 /* Contenedor del formulario/botones en el modal */
+
 .modal-content {
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center; /* Centra los elementos */
+
     gap: 15px;
+
 }
+
+
 
 /* Reducir el ancho de los botones y el input */
-.reload-btn, 
+
+.reload-btn,
+
 #input-room {
+
     width: 200px; /* Ancho fijo para que no ocupen todo el espacio */
+
     max-width: 80%; /* Asegura que en móviles no se salgan */
+
     margin-left: auto;
+
     margin-right: auto;
+
     box-sizing: border-box;
+
 }
+
+
 
 /* Estilo específico para el campo de entrada de código */
+
 #input-room {
+
     background: rgba(0, 0, 0, 0.6);
+
     border: 1px solid var(--accent2); /* Un color diferente para distinguir */
+
     padding: 8px;
+
     text-transform: uppercase;
+
     font-family: var(--font-tech);
+
     letter-spacing: 2px;
+
 }
+
+
 
 /* Opcional: Si quieres que el separador "- O -" se vea mejor */
+
 .modal-content p {
+
     margin: 5px 0;
+
     font-size: 0.8rem;
+
     opacity: 0.6;
+
 }
+
+
 
 /* Evita que la carta reaccione al cursor una vez volteada */
+
 .card.flipped {
+
     pointer-events: none; /* Esto impide que el hover afecte la carta abierta */
+
     transform: rotateY(180deg);
+
 }
+
+
 
 /* Asegúrate de que la cara trasera tenga visibilidad total */
+
 .card-back {
+
     backface-visibility: hidden;
+
     -webkit-backface-visibility: hidden;
+
     display: flex !important; /* Fuerza a que se mantenga visible */
+
     transform: rotateY(180deg);
+
     z-index: 2;
+
 }
+
+
 
 /* Si tienes alguna regla de hover que cambie la opacidad, límpiala así: */
+
 .card.flipped:hover {
+
     opacity: 1 !important;
+
     filter: none !important;
+
 }
+
+
 
 .modal-content {
+
     display: flex;
+
     flex-direction: column;
+
     align-items: center; /* Centra horizontalmente */
+
     justify-content: center;
+
 }
+
+
 
 #input-room {
+
     width: 160px; /* Tamaño específico para el código */
+
     text-align: center;
+
     margin: 10px 0;
+
 }
+
+
 
 /* Asegura que el contenedor de la carta tenga la profundidad correcta */
+
 .card {
+
     aspect-ratio: 3/4;
+
     position: relative;
+
     transform-style: preserve-3d;
+
     transition: transform 0.6s cubic-bezier(.4, 0, .2, 1);
+
     cursor: pointer;
+
     /* Añade esta línea para móviles */
-    -webkit-transform-style: preserve-3d; 
+
+    -webkit-transform-style: preserve-3d;
+
 }
+
+
 
 /* Cara de enfrente (ADN) */
+
 .card-front {
+
     position: absolute;
+
     width: 100%;
+
     height: 100%;
+
     backface-visibility: hidden;
+
     -webkit-backface-visibility: hidden;
+
     z-index: 2; /* Importante */
+
     transform: rotateY(0deg);
+
 }
+
+
 
 /* Cara de atrás (Imagen) */
+
 .card-back {
+
     position: absolute;
+
     width: 100%;
+
     height: 100%;
+
     backface-visibility: hidden;
+
     -webkit-backface-visibility: hidden;
+
     transform: rotateY(180deg);
+
     z-index: 1; /* Inicialmente atrás */
+
     display: flex !important;
+
     flex-direction: column;
+
     background: white;
+
 }
+
+
 
 /* Cuando la carta se voltea, intercambiamos la prioridad visual */
+
 .card.flipped .card-back {
+
     z-index: 5; /* Pasa al frente de todo */
+
 }
+
+
 
 .card.flipped .card-front {
+
     z-index: 1; /* Se va al fondo */
+
 }
+
+
 
 /* Añade esto a tu card-back */
+
 .card-back {
+
     /* ... tus estilos anteriores ... */
-    transform: rotateY(180deg) translateZ(1px); 
+
+    transform: rotateY(180deg) translateZ(1px);
+
 }
 
+
+
 .grid-container {
+
     /* ... tus estilos anteriores ... */
+
     transform: translateZ(0); /* Activa la aceleración por hardware */
+
     will-change: transform;
+
 }
