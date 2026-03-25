@@ -1,5 +1,6 @@
 const socket = io();
 
+// ESTADOS DEL JUEGO
 let roomCode = "";
 let myPlayerNum = 0;
 let isMyTurn = false;
@@ -7,12 +8,12 @@ let currentPlayer = 1;
 let scores = [0, 0];
 let lockBoard = false;
 
-// Tiempos individuales (120 segundos = 2 minutos)
+// TIEMPOS INDIVIDUALES (2 MINUTOS CADA UNO)
 let timers = [120, 120]; 
-let countdownInterval;
+let countdownInterval = null;
 
 /* ========================= */
-/* 🔗 GESTIÓN DE SALAS */
+/* 🔗 GESTIÓN DE SALAS (LOBBY) */
 /* ========================= */
 
 function createRoom() {
@@ -23,44 +24,67 @@ function createRoom() {
 
 function joinRoom() {
     const input = document.getElementById('input-room');
-    roomCode = input.value.toUpperCase();
-    if (roomCode) socket.emit('joinRoom', roomCode);
+    const code = input.value.toUpperCase();
+    if (code) {
+        roomCode = code;
+        socket.emit('joinRoom', roomCode);
+    }
 }
 
+// Se ejecuta cuando entras a la sala (pero falta el rival)
 socket.on('playerAssigned', (num) => {
     myPlayerNum = num;
-    document.getElementById('lobby-overlay').classList.add('hidden');
-    document.getElementById('room-info').textContent = "ESPERANDO AL OPONENTE...";
+    // Ocultar elementos de interacción del lobby mientras espera
+    document.getElementById('room-info').textContent = "CONECTADO | ESPERANDO RIVAL...";
+    console.log("Asignado como Jugador " + num);
 });
 
+// SE EJECUTA CUANDO AMBOS ESTÁN CONECTADOS
 socket.on('initGame', () => {
+    console.log("¡Partida Iniciada!");
+    
+    // 1. Limpieza visual: Activar clase para que el CSS oculte el lobby
     document.body.classList.add('game-active');
+    
+    // 2. Asegurar que el contenedor del lobby desaparezca
+    const lobby = document.getElementById('lobby-overlay');
+    if (lobby) lobby.style.display = 'none';
+
+    // 3. Mostrar el tablero y la info de sala
+    document.getElementById('game-board').classList.remove('hidden');
     document.getElementById('room-info').textContent = "SALA: " + roomCode;
+    
+    // 4. Arrancar mecánica
     startGame();
     startGlobalTimer();
 });
 
 /* ========================= */
-/* ⏳ SISTEMA DE TIEMPO */
+/* ⏳ SISTEMA DE TIEMPO (2 MIN) */
 /* ========================= */
 
 function startGlobalTimer() {
+    // Si ya había un reloj corriendo, lo limpiamos
     if(countdownInterval) clearInterval(countdownInterval);
     
     countdownInterval = setInterval(() => {
-        // Solo descuenta al jugador cuyo turno esté activo
+        // Solo resta tiempo al jugador que tiene el turno actual
         timers[currentPlayer - 1]--;
         
         updateTimerUI();
         
+        // Verificación de derrota por tiempo
         if(timers[currentPlayer - 1] <= 0) {
-            endGame(`TIEMPO AGOTADO - GANADOR J${currentPlayer === 1 ? 2 : 1}`);
+            clearInterval(countdownInterval);
+            const winnerText = currentPlayer === 1 ? "GANADOR: J2 (POR TIEMPO)" : "GANADOR: J1 (POR TIEMPO)";
+            endGame(winnerText);
         }
     }, 1000);
 }
 
 function updateTimerUI() {
-    const format = (s) => {
+    const formatTime = (s) => {
+        if (s < 0) s = 0;
         const min = Math.floor(s / 60);
         const seg = s % 60;
         return `${min}:${seg.toString().padStart(2, '0')}`;
@@ -69,16 +93,16 @@ function updateTimerUI() {
     const t1 = document.getElementById('timer1');
     const t2 = document.getElementById('timer2');
     
-    t1.textContent = format(timers[0]);
-    t2.textContent = format(timers[1]);
+    if(t1) t1.textContent = formatTime(timers[0]);
+    if(t2) t2.textContent = formatTime(timers[1]);
 
-    // Alerta visual si queda poco tiempo
-    t1.style.color = timers[0] < 15 ? "var(--error)" : "white";
-    t2.style.color = timers[1] < 15 ? "var(--error)" : "white";
+    // Feedback visual de "Poco tiempo" (rojo)
+    if(t1) t1.style.color = timers[0] < 15 ? "var(--error)" : "white";
+    if(t2) t2.style.color = timers[1] < 15 ? "var(--error)" : "white";
 }
 
 /* ========================= */
-/* 🎮 LÓGICA DEL JUEGO */
+/* 🎮 LÓGICA DE CARTAS */
 /* ========================= */
 
 const rawData = [
@@ -116,7 +140,7 @@ function startGame() {
         deck.push({ id: item.id, content: item.img, type: 'img' });
     });
 
-    // Mezcla sincronizada por código de sala
+    // Mezcla sincronizada usando el código de sala como semilla
     let seed = roomCode.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
     const seededRandom = () => {
         seed = (seed * 9301 + 49297) % 233280;
@@ -135,7 +159,9 @@ function startGame() {
         card.innerHTML = `
             <div class="card-face card-front"></div>
             <div class="card-back card-face">
-                ${data.type === 'img' ? `<img src="${data.content}">` : `<span>${data.content}</span>`}
+                ${data.type === 'img' 
+                    ? `<img src="${data.content}" loading="lazy">` 
+                    : `<span>${data.content}</span>`}
             </div>
         `;
         card.onclick = () => {
@@ -146,24 +172,33 @@ function startGame() {
     });
 }
 
+/* ========================= */
+/* 🔄 SYNC EVENTOS (SOCKETS) */
+/* ========================= */
+
 socket.on('flipCardGlobal', (index) => {
     const cards = document.querySelectorAll('.card');
-    cards[index].classList.add('flipped');
+    if(cards[index]) cards[index].classList.add('flipped');
 });
 
 socket.on('matchResult', ({ indexes, match }) => {
     const cards = document.querySelectorAll('.card');
     const [c1, c2] = indexes.map(i => cards[i]);
 
+    if (!c1 || !c2) return;
+
     if (match) {
         c1.classList.add('correct');
         c2.classList.add('correct');
         scores[currentPlayer - 1]++;
-        document.getElementById(`score${currentPlayer}`).textContent = scores[currentPlayer - 1];
         
+        const scoreElem = document.getElementById(`score${currentPlayer}`);
+        if(scoreElem) scoreElem.textContent = scores[currentPlayer - 1];
+        
+        // Verificar si se encontraron todos los pares
         if (scores[0] + scores[1] === 22) {
-            const winner = scores[0] > scores[1] ? "GANADOR: J1" : "GANADOR: J2";
-            endGame(winner);
+            let finalMsg = scores[0] === scores[1] ? "EMPATE" : (scores[0] > scores[1] ? "GANADOR: J1" : "GANADOR: J2");
+            endGame(finalMsg);
         }
     } else {
         lockBoard = true;
@@ -180,12 +215,18 @@ socket.on('matchResult', ({ indexes, match }) => {
 socket.on('nextTurn', (turn) => {
     currentPlayer = turn;
     isMyTurn = (turn === myPlayerNum);
+    
+    // Actualizar UI visual de turno activo
     document.querySelectorAll('.player-box').forEach(b => b.classList.remove('active'));
-    document.getElementById(`p${turn}-ui`).classList.add('active');
+    const activeBox = document.getElementById(`p${turn}-ui`);
+    if(activeBox) activeBox.classList.add('active');
 });
 
 function endGame(msg) {
-    clearInterval(countdownInterval);
-    document.getElementById('win-modal').classList.remove('hidden');
-    document.getElementById('grand-winner-name').textContent = msg;
+    if(countdownInterval) clearInterval(countdownInterval);
+    const modal = document.getElementById('win-modal');
+    const winText = document.getElementById('grand-winner-name');
+    
+    if(modal) modal.classList.remove('hidden');
+    if(winText) winText.textContent = msg;
 }

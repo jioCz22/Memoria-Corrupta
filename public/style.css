@@ -135,3 +135,22 @@ input#input-room {
 
 .card-back img { max-width: 90%; max-height: 80%; object-fit: contain; }
 .card-back span { font-size: 0.7rem; font-weight: bold; text-align: center; }
+
+/* Estado inicial: Ocultamos el tablero y los puntos */
+#game-board, .ui-container {
+    display: none !important;
+}
+
+/* Cuando la partida inicia, ocultamos el lobby y mostramos el juego */
+body.game-active #lobby-overlay, 
+body.game-active header { /* Si quieres ocultar el título superior también */
+    display: none !important;
+}
+
+body.game-active #game-board {
+    display: grid !important;
+}
+
+body.game-active .ui-container {
+    display: flex !important;
+}

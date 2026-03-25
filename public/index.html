@@ -10,23 +10,37 @@
 </head>
 <body>
 
-    <header>
-        <h1 id="main-title">BIOLOGÍA</h1>
+    <div id="lobby-overlay">
+        <header>
+            <h1 class="glitch-text">LOS CORRUPTOS</h1>
+            <div class="lobby-controls">
+                <button class="reload-btn" onclick="createRoom()">CREAR SALA</button>
+                <p>— O —</p>
+                <input type="text" id="input-room" placeholder="CÓDIGO" maxlength="6">
+                <button class="reload-btn" style="border-color:var(--accent2); color:var(--accent2);" onclick="joinRoom()">UNIRSE</button>
+            </div>
+        </header>
+    </div>
+
+    <div class="game-header">
+        <h2 id="main-title">BIOLOGÍA</h2>
         <p id="room-info">ESPERANDO SALA...</p>
-    </header>
+    </div>
 
     <div class="ui-container">
         <div id="p1-ui" class="player-box">
             <div class="player-header">J1 🧬</div>
             <div class="stats">
-                Puntos: <span id="score1">0</span> | <span id="timer1">00:00</span>
+                Puntos: <span id="score1">0</span>
+                <div class="timer-box">⏳ <span id="timer1">02:00</span></div>
             </div>
         </div>
 
         <div id="p2-ui" class="player-box">
             <div class="player-header">J2 🔬</div>
             <div class="stats">
-                Puntos: <span id="score2">0</span> | <span id="timer2">00:00</span>
+                Puntos: <span id="score2">0</span>
+                <div class="timer-box">⏳ <span id="timer2">02:00</span></div>
             </div>
         </div>
     </div>
