@@ -1,213 +1,267 @@
+/* ========================= */
+/* 🎨 VARIABLES MODERNIZADAS */
+/* ========================= */
 :root {
-    --bg: #f8fafc;           /* Fondo gris muy claro */
-    --text: #1e293b;         /* Texto azul oscuro/gris */
-    --primary: #3b82f6;      /* Azul moderno */
-    --accent: #10b981;       /* Verde para aciertos/código */
-    --error: #ef4444;        /* Rojo para errores/tiempo bajo */
-    --card-bg: #ffffff;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --bg-dark: #020b0d;
+    --bg-panel: rgba(10, 30, 35, 0.75);
+    --accent: #00ffcc; /* Verde neón */
+    --accent-glow: rgba(0, 255, 204, 0.4);
+    --accent2: #0099ff; /* Azul tech */
+    --error: #ff3366;
+    --text: #e0fbff;
+    --card-bg: #0d2b2e;
+    --font-tech: 'Orbitron', sans-serif;
+    --font-body: 'Roboto', sans-serif;
 }
 
+/* ========================= */
+/* BASE & FONDO DINÁMICO */
+/* ========================= */
 body {
     margin: 0;
-    font-family: 'Inter', -apple-system, sans-serif;
-    background-color: var(--bg);
+    padding: 0;
+    background: var(--bg-dark);
     color: var(--text);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    font-family: var(--font-body);
+    overflow-x: hidden;
     min-height: 100vh;
+    /* Fondo con textura de red sutil */
+    background-image: 
+        radial-gradient(circle at 50% 50%, #062129 0%, #01080a 100%),
+        linear-gradient(rgba(0, 255, 204, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
 }
 
-.hidden { display: none !important; }
+/* ========================= */
+/* HEADER REFINADO */
+/* ========================= */
+header {
+    text-align: center;
+    padding: 25px 15px;
+    background: linear-gradient(to bottom, rgba(0,255,204,0.1), transparent);
+}
+
+header h1 {
+    font-family: var(--font-tech);
+    color: var(--accent);
+    font-size: clamp(1.8rem, 5vw, 3rem); /* Tamaño fluido */
+    margin: 0;
+    letter-spacing: 4px;
+    text-shadow: 0 0 15px var(--accent-glow);
+}
+
+header p {
+    color: var(--accent2);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 5px;
+}
 
 /* ========================= */
-/* 🏢 LOBBY MINIMALISTA      */
+/* UI - PANELES DE JUGADORES (GLASSMORPHISM) */
 /* ========================= */
-#lobby-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--bg);
+.ui-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    gap: 20px;
+    padding: 15px;
+    flex-wrap: wrap;
 }
 
-.lobby-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: var(--shadow);
+.player-box {
+    background: var(--bg-panel);
+    backdrop-filter: blur(8px); /* Efecto cristal */
+    padding: 15px 25px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 255, 204, 0.1);
     text-align: center;
-    width: 90%;
-    max-width: 400px;
+    min-width: 140px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); /* Diseño asimétrico */
 }
 
-.lobby-card h1 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary);
-}
-
-.actions {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.join-group {
-    display: flex;
-    gap: 0.5rem;
-}
-
-input {
-    flex: 1;
-    padding: 0.75rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-}
-
-button {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-primary { background: var(--primary); color: white; }
-.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-.btn-secondary { background: #e2e8f0; color: var(--text); }
-
-/* ========================= */
-/* 📊 BARRA DE ESTADO (TOP)  */
-/* ========================= */
-.status-bar {
-    width: 100%;
-    background: white;
-    padding: 1rem;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    box-shadow: var(--shadow);
-    position: sticky;
-    top: 0;
-    z-index: 500;
-}
-
-.player-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    opacity: 0.4;
-    transition: 0.3s;
-}
-
-.player-info.active {
+.player-box.active {
     opacity: 1;
-    color: var(--primary);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px var(--accent-glow);
+    transform: translateY(-5px) scale(1.05);
+    background: rgba(0, 255, 204, 0.15);
 }
 
-.score { font-size: 1.25rem; font-weight: 800; }
-.timer { font-family: monospace; font-size: 1rem; font-weight: 700; }
-
-.room-display {
-    text-align: center;
-    background: #f1f5f9;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+.player-header {
+    font-family: var(--font-tech);
+    color: var(--accent);
+    font-size: 1.1rem;
+    margin-bottom: 3px;
 }
 
-.room-label { font-size: 0.6rem; color: var(--secondary); display: block; }
-.room-code { font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+.stats {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+}
 
 /* ========================= */
-/* 🎮 TABLERO Y CARTAS       */
+/* GRID AUTO-AJUSTABLE */
 /* ========================= */
 .grid-container {
     display: grid;
-    /* 4 columnas en móvil, hasta 6 u 8 en PC */
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    padding: 15px;
-    width: 100%;
-    max-width: 900px;
-    box-sizing: border-box;
+    /* Esto ajusta el número de columnas automáticamente según el ancho */
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 12px;
+    width: 95vw;
+    max-width: 1200px;
+    margin: 10px auto 40px;
+    padding: 10px;
 }
 
+/* Ajuste específico para pantallas muy grandes (PC) */
+@media (min-width: 1200px) {
+    .grid-container {
+        grid-template-columns: repeat(11, 1fr);
+    }
+}
+
+/* ========================= */
+/* TARJETAS (CARTAS) MEJORADAS */
+/* ========================= */
 .card {
-    aspect-ratio: 1 / 1; /* Cartas cuadradas para que la imagen se vea mejor */
+    aspect-ratio: 3/4;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
 }
 
-.card.flipped { transform: rotateY(180deg); }
+.card:hover {
+    filter: brightness(1.2);
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+}
 
 .card-face {
     position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden; /* Importante para las imágenes */
-    border: 2px solid transparent;
-}
-
-.card-front {
-    background: var(--primary);
-    box-shadow: var(--shadow);
-}
-
-.card-back {
-    background: white;
-    transform: rotateY(180deg);
-    border-color: var(--primary);
-}
-
-/* 🖼️ ESTILO DE IMÁGENES DENTRO DE CARTAS */
-.card-back img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Muestra la imagen completa sin recortar */
-    background: #fff;
+    border-radius: 8px;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Frente (Cerrada) */
+.card-front {
+    background: linear-gradient(135deg, #0d2b2e 0%, #051216 100%);
+}
+
+.card-front::after {
+    content: "🧬";
+    font-size: 2.2rem;
+    filter: drop-shadow(0 0 8px var(--accent));
+}
+
+/* Atrás (Abierta) */
+.card-back {
+    background: #ffffff;
+    color: #000;
+    transform: rotateY(180deg);
+    padding: 10px;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-back img {
+    max-width: 100%;
+    max-height: 75%;
+    object-fit: contain;
+    border-radius: 4px;
 }
 
 .card-back span {
+    font-family: var(--font-tech);
     font-size: 0.7rem;
-    font-weight: 700;
+    font-weight: bold;
+    color: #051216;
     text-align: center;
-    padding: 4px;
-    word-break: break-word;
-}
-
-.card.correct .card-back {
-    border-color: var(--accent);
-    background: #ecfdf5;
+    line-height: 1;
 }
 
 /* ========================= */
-/* 📱 AJUSTES PARA MÓVIL     */
+/* ANIMACIONES DE RESULTADO */
 /* ========================= */
-@media (max-width: 480px) {
+.card.correct {
+    animation: success-glow 0.5s ease forwards;
+}
+
+@keyframes success-glow {
+    0% { transform: rotateY(180deg) scale(1); }
+    50% { transform: rotateY(180deg) scale(1.1); box-shadow: 0 0 25px #00ff88; }
+    100% { transform: rotateY(180deg) scale(1); box-shadow: 0 0 10px #00ff88; }
+}
+
+.card.wrong {
+    animation: error-shake 0.4s linear;
+}
+
+@keyframes error-shake {
+    0%, 100% { transform: rotateY(180deg) translateX(0); }
+    25% { transform: rotateY(180deg) translateX(-8px); border-color: var(--error); }
+    75% { transform: rotateY(180deg) translateX(8px); border-color: var(--error); }
+}
+
+/* ========================= */
+/* MODALES Y BOTONES */
+/* ========================= */
+.modal-content {
+    background: var(--bg-panel);
+    backdrop-filter: blur(15px);
+    border: 2px solid var(--accent);
+    padding: 30px;
+    border-radius: 5px; /* Más cuadrado para estilo tech */
+    box-shadow: 0 0 40px rgba(0, 255, 204, 0.2);
+}
+
+.reload-btn {
+    border: 1px solid var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: 0.4s;
+}
+
+.reload-btn:hover {
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 0 20px var(--accent);
+}
+
+/* ========================= */
+/* 📱 AJUSTES RESPONSIVE MÓVIL */
+/* ========================= */
+@media (max-width: 600px) {
     .grid-container {
-        grid-template-columns: repeat(4, 1fr); /* 4 columnas fijas en móvil */
-        gap: 6px;
+        grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+        gap: 8px;
+        padding: 5px;
+    }
+
+    .player-box {
+        min-width: 110px;
         padding: 10px;
     }
-    
-    .status-bar {
-        padding: 0.5rem;
-    }
 
-    .room-display {
-        padding: 0.3rem 0.5rem;
+    .card-front::after {
+        font-size: 1.6rem;
     }
 
     .card-back span {
@@ -215,31 +269,140 @@ button {
     }
 }
 
-@media (min-width: 768px) {
+/* Solución para que las imágenes no se vean mal en móviles pequeños */
+@media (max-width: 360px) {
     .grid-container {
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
-    .card { aspect-ratio: 3/4; } /* En PC pueden ser más altas */
 }
 
+
 /* ========================= */
-/* 🏆 MODAL DE VICTORIA      */
+/* AJUSTE DE BOTONES E INPUTS */
 /* ========================= */
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(4px);
+
+/* Contenedor del formulario/botones en el modal */
+.modal-content {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos */
+    gap: 15px;
+}
+
+/* Reducir el ancho de los botones y el input */
+.reload-btn, 
+#input-room {
+    width: 200px; /* Ancho fijo para que no ocupen todo el espacio */
+    max-width: 80%; /* Asegura que en móviles no se salgan */
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+/* Estilo específico para el campo de entrada de código */
+#input-room {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--accent2); /* Un color diferente para distinguir */
+    padding: 8px;
+    text-transform: uppercase;
+    font-family: var(--font-tech);
+    letter-spacing: 2px;
+}
+
+/* Opcional: Si quieres que el separador "- O -" se vea mejor */
+.modal-content p {
+    margin: 5px 0;
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+/* Evita que la carta reaccione al cursor una vez volteada */
+.card.flipped {
+    pointer-events: none; /* Esto impide que el hover afecte la carta abierta */
+    transform: rotateY(180deg);
+}
+
+/* Asegúrate de que la cara trasera tenga visibilidad total */
+.card-back {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex !important; /* Fuerza a que se mantenga visible */
+    transform: rotateY(180deg);
+    z-index: 2;
+}
+
+/* Si tienes alguna regla de hover que cambie la opacidad, límpiala así: */
+.card.flipped:hover {
+    opacity: 1 !important;
+    filter: none !important;
 }
 
 .modal-content {
-    background: white;
-    padding: 2.5rem;
-    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente */
+    justify-content: center;
+}
+
+#input-room {
+    width: 160px; /* Tamaño específico para el código */
     text-align: center;
-    max-width: 300px;
+    margin: 10px 0;
+}
+
+/* Asegura que el contenedor de la carta tenga la profundidad correcta */
+.card {
+    aspect-ratio: 3/4;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(.4, 0, .2, 1);
+    cursor: pointer;
+    /* Añade esta línea para móviles */
+    -webkit-transform-style: preserve-3d; 
+}
+
+/* Cara de enfrente (ADN) */
+.card-front {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    z-index: 2; /* Importante */
+    transform: rotateY(0deg);
+}
+
+/* Cara de atrás (Imagen) */
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: rotateY(180deg);
+    z-index: 1; /* Inicialmente atrás */
+    display: flex !important;
+    flex-direction: column;
+    background: white;
+}
+
+/* Cuando la carta se voltea, intercambiamos la prioridad visual */
+.card.flipped .card-back {
+    z-index: 5; /* Pasa al frente de todo */
+}
+
+.card.flipped .card-front {
+    z-index: 1; /* Se va al fondo */
+}
+
+/* Añade esto a tu card-back */
+.card-back {
+    /* ... tus estilos anteriores ... */
+    transform: rotateY(180deg) translateZ(1px); 
+}
+
+.grid-container {
+    /* ... tus estilos anteriores ... */
+    transform: translateZ(0); /* Activa la aceleración por hardware */
+    will-change: transform;
 }

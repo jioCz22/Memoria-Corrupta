@@ -2,78 +2,43 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Memoria corrupta</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LOS CORRUPTOS | Bio-Game</title>
     <link rel="stylesheet" href="style.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
 
-    <div id="lobby-overlay">
-        <div class="lobby-card">
-            <div class="brand">
-                <span class="icon">🧬</span>
-                <h1>BIOLOGÍA</h1>
-                <p>MEMORIA CORRUPTA</p>
+    <header>
+        <h1 id="main-title">BIOLOGÍA</h1>
+        <p id="room-info">ESPERANDO SALA...</p>
+    </header>
+
+    <div class="ui-container">
+        <div id="p1-ui" class="player-box">
+            <div class="player-header">J1 🧬</div>
+            <div class="stats">
+                Puntos: <span id="score1">0</span> | <span id="timer1">00:00</span>
             </div>
+        </div>
 
-            <div class="actions">
-                <button class="btn-primary" onclick="createRoom()">
-                    Crear Nueva Sala
-                </button>
-
-                <div class="separator">ó únete a una existente</div>
-
-                <div class="join-group">
-                    <input type="text" id="input-room" placeholder="Código de 6 dígitos" autocomplete="off">
-                    <button class="btn-secondary" onclick="joinRoom()">Unirse</button>
-                </div>
+        <div id="p2-ui" class="player-box">
+            <div class="player-header">J2 🔬</div>
+            <div class="stats">
+                Puntos: <span id="score2">0</span> | <span id="timer2">00:00</span>
             </div>
         </div>
     </div>
 
-    <div id="game-ui" class="hidden">
-        <header class="status-bar">
-            
-            <div id="p1-ui" class="player-info">
-                <div class="player-label">JUGADOR 1</div>
-                <div class="stats-row">
-                    <span id="score1" class="score">0</span>
-                    <span id="timer1" class="timer">02:00</span>
-                </div>
-            </div>
-
-            <div class="room-display">
-                <span class="room-label">CÓDIGO</span>
-                <span id="current-room-code" class="room-code">------</span>
-            </div>
-
-            <div id="p2-ui" class="player-info">
-                <div class="player-label">JUGADOR 2</div>
-                <div class="stats-row">
-                    <span id="timer2" class="timer">02:00</span>
-                    <span id="score2" class="score">0</span>
-                </div>
-            </div>
-            
-        </header>
-
-        <main id="game-board" class="grid-container">
-            </main>
-    </div>
+    <main id="game-board" class="grid-container hidden">
+        </main>
 
     <div id="win-modal" class="modal hidden">
         <div class="modal-content">
-            <div class="win-icon">🏆</div>
-            <h2 id="grand-winner-name">¡PARTIDA FINALIZADA!</h2>
-            <p>El sistema ha sido restaurado con éxito.</p>
-            <button class="btn-primary" onclick="location.reload()">
-                Volver al Menú
-            </button>
+            <h2 class="glitch-text">SISTEMA RESTAURADO</h2>
+            <p id="grand-winner-name">GANADOR: --</p>
+            <button class="reload-btn" onclick="location.reload()">REINICIAR</button>
         </div>
     </div>
 
