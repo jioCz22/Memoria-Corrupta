@@ -275,3 +275,43 @@ header p {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+
+/* ========================= */
+/* AJUSTE DE BOTONES E INPUTS */
+/* ========================= */
+
+/* Contenedor del formulario/botones en el modal */
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos */
+    gap: 15px;
+}
+
+/* Reducir el ancho de los botones y el input */
+.reload-btn, 
+#input-room {
+    width: 200px; /* Ancho fijo para que no ocupen todo el espacio */
+    max-width: 80%; /* Asegura que en móviles no se salgan */
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+/* Estilo específico para el campo de entrada de código */
+#input-room {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--accent2); /* Un color diferente para distinguir */
+    padding: 8px;
+    text-transform: uppercase;
+    font-family: var(--font-tech);
+    letter-spacing: 2px;
+}
+
+/* Opcional: Si quieres que el separador "- O -" se vea mejor */
+.modal-content p {
+    margin: 5px 0;
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
