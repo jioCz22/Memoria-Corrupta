@@ -24,74 +24,28 @@
                 </div>
             </div>
         </div>
-    </div><div id="lobby-overlay" class="modal"> <div class="modal-content"> <h1 class="glitch">BIOLOGÍA</h1>
-        <p>Juego de Memoria Científica</p>
-        
-        <div class="actions">
-            <button class="reload-btn" onclick="createRoom()">CREAR SALA</button>
-            <p>— o únete a una —</p>
-            <input type="text" id="input-room" placeholder="CÓDIGO" maxlength="6">
-            <button class="reload-btn" style="border-color: var(--accent2);" onclick="joinRoom()">UNIRSE</button>
-        </div>
+    <div id="lobby-overlay" class="modal">
+    <div class="modal-content">
+        <h1>BIOGENIX</h1>
+
+        <button onclick="createRoom()">CREAR SALA</button>
+
+        <input id="input-room" placeholder="Código">
+
+        <button onclick="joinRoom()">UNIRSE</button>
     </div>
 </div>
 
-    <div id="game-ui" class="hidden">
-        <header>
-            <h1 style="font-family: var(--font-tech); color: var(--accent); font-size: 1.5rem;">BIOGENIX 3D</h1>
-            <div class="room-display" style="font-size: 0.8rem; color: var(--accent2); margin-top: 5px;">
-                SALA: <span id="current-room-code" style="color: #fff; letter-spacing: 2px;">------</span>
-            </div>
-        </header>
+<div id="game-ui" class="hidden">
 
-        <div class="ui-container">
-            <div id="p1-ui" class="player-box">
-                <div class="player-header">JUGADOR 1</div>
-                <div class="stats">
-                    <span id="score1">0</span> <small style="font-size: 0.6rem; opacity: 0.6;">PARES</small>
-                    <div id="timer1" style="font-size: 0.9rem; color: var(--accent2); margin-top: 5px;">02:00</div>
-                </div>
-            </div>
+    <div id="p1-ui" class="player-box">Jugador 1 <span id="score1">0</span></div>
+    <div id="p2-ui" class="player-box">Jugador 2 <span id="score2">0</span></div>
 
-            <div id="p2-ui" class="player-box">
-                <div class="player-header">JUGADOR 2</div>
-                <div class="stats">
-                    <span id="score2">0</span> <small style="font-size: 0.6rem; opacity: 0.6;">PARES</small>
-                    <div id="timer2" style="font-size: 0.9rem; color: var(--accent2); margin-top: 5px;">02:00</div>
-                </div>
-            </div>
-        </div>
+    <div id="game-board" class="grid-container"></div>
 
-        <main id="game-board" class="grid-container"></main>
-    </div>
+</div>
 
-    <div id="win-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2 id="grand-winner-name" style="font-family: var(--font-tech); color: var(--accent); font-size: 2rem;">---</h2>
-            <p style="margin-bottom: 20px; opacity: 0.8;">Secuencia de ADN completada con éxito.</p>
-            
-            <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-                <button id="study-mode-btn" class="reload-btn" style="border-color: var(--accent2); background: rgba(0, 153, 255, 0.1);">
-                    📖 REPASAR CONCEPTOS
-                </button>
-                
-                <button class="reload-btn" onclick="location.reload()" style="background: rgba(0, 255, 204, 0.1);">
-                    REINTENTAR PARTIDA
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="study-viewer" class="hidden">
-        <header style="display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--accent); background: var(--bg-dark);">
-            <h1 style="font-family: var(--font-tech); color: var(--accent2); font-size: 1.2rem; margin: 0;">GUÍA DE REPASO CIENTÍFICO</h1>
-            <button onclick="closeStudyMode()" class="reload-btn" style="padding: 5px 15px; font-size: 0.7rem; margin: 0;">
-                VOLVER A RESULTADOS
-            </button>
-        </header>
-        <main id="study-grid" class="grid-container" style="padding: 30px;"></main>
-    </div>
-
-    <script src="script.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
