@@ -268,3 +268,40 @@ header h1 {
     #study-viewer .grid-container { grid-template-columns: repeat(2, 1fr); }
     .card-front::after { font-size: 1.6rem; }
 }
+
+/* Esto hace que el fondo sea oscuro y centre la tarjeta */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;    /* Centra vertical */
+    justify-content: center; /* Centra horizontal */
+    z-index: 1000;
+}
+
+/* Esto crea la "cajita" neón que ves en los diseños */
+.modal-content {
+    background: var(--bg-panel);
+    backdrop-filter: blur(15px);
+    border: 2px solid var(--accent);
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 30px var(--accent-glow);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 300px; /* Tamaño fijo para que se vea ordenado */
+}
+
+/* Arreglo para los botones que se ven blancos/simples */
+.reload-btn {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 10px;
+    font-family: var(--font-tech);
+    cursor: pointer;
+    text-transform: uppercase;
+}
