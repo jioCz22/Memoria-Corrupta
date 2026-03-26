@@ -56,17 +56,28 @@ socket.on('initGame', () => {
 /* ========================= */
 
 const rawData = [
-    { id: 1, text: "Célula", img: "/img/celula.jpg" }, { id: 2, text: "ADN", img: "/img/adn.jpg" },
-    { id: 3, text: "Gen", img: "/img/gen.jpg" }, { id: 4, text: "Cromosoma", img: "/img/cromosoma.jpg" },
-    { id: 5, text: "Mendel", img: "/img/mendel.jpg" }, { id: 6, text: "Mutación", img: "/img/mutacion.jpg" },
-    { id: 7, text: "Adenina", img: "/img/adenina.jpg" }, { id: 8, text: "Timina", img: "/img/timina.jpg" },
-    { id: 9, text: "Guanina", img: "/img/guanina.jpg" }, { id: 10, text: "Citosina", img: "/img/citosina.jpg" },
-    { id: 11, text: "Fenotipo", img: "/img/fenotipo.jpg" }, { id: 12, text: "Genotipo", img: "/img/genotipo.jpg" },
-    { id: 13, text: "Alelo", img: "/img/alelo.jpg" }, { id: 14, text: "Homocigoto", img: "/img/homocigoto.jpg" },
-    { id: 15, text: "Heterocigoto", img: "/img/heterocigoto.jpg" }, { id: 16, text: "Dominante", img: "/img/dominante.jpg" },
-    { id: 17, text: "Recesiva", img: "/img/recesiva.jpg" }, { id: 18, text: "Codominante", img: "/img/codominante.jpg" },
-    { id: 19, text: "Intermedia", img: "/img/intermedia.jpg" }, { id: 20, text: "1ra Ley", img: "/img/ley1.jpg" },
-    { id: 21, text: "2da Ley", img: "/img/ley2.jpg" }, { id: 22, text: "3ra Ley", img: "/img/ley3.jpg" }
+    { id: 1, text: "Célula: Unidad básica, estructural y funcional de todos los seres vivos.", img: "/img/celula.jpg" },
+    { id: 2, text: "ADN: Molécula que contiene la información genética de los seres vivos.", img: "/img/adn.jpg" },
+    { id: 3, text: "Gen: Segmento de ADN que contiene la instrucción para un rasgo específico.", img: "/img/gen.jpg" },
+    { id: 4, text: "Cromosoma: Estructura formada por ADN condensado presente en el núcleo.", img: "/img/cromosoma.jpg" },
+    { id: 5, text: "Gregor Mendel: Monje científico considerado el padre de la genética moderna.", img: "/img/mendel.jpg" },
+    { id: 6, text: "Mutación: Cambio aleatorio en la secuencia del ADN que genera variación.", img: "/img/mutacion.jpg" },
+    { id: 7, text: "Adenina: Base nitrogenada que siempre se empareja con la Timina.", img: "/img/adenina.jpg" },
+    { id: 8, text: "Timina: Base nitrogenada exclusiva del ADN que se une a la Adenina.", img: "/img/timina.jpg" },
+    { id: 9, text: "Guanina: Base nitrogenada que siempre se empareja con la Citosina.", img: "/img/guanina.png" },
+    { id: 10, text: "Citosina: Base nitrogenada que se une a la Guanina mediante tres puentes.", img: "/img/citosina.jpg" },
+    { id: 11, text: "Fenotipo: Expresión física o rasgos observables de un individuo.", img: "/img/fenotipo.jpg" },
+    { id: 12, text: "Genotipo: Conjunto de genes que posee un organismo en su ADN.", img: "/img/genotipo.jpg" },
+    { id: 13, text: "Alelo: Cada una de las formas alternativas que puede tener un mismo gen.", img: "/img/alelo.jpg" },
+    { id: 14, text: "Homocigoto: Individuo con dos alelos iguales para un gen (AA o aa).", img: "/img/homocigoto.jpg" },
+    { id: 15, text: "Heterocigoto: Individuo con dos alelos diferentes para un gen (Aa).", img: "/img/heterocigoto.jpg" },
+    { id: 16, text: "Herencia Dominante: Rasgo que se expresa siempre que el alelo está presente.", img: "/img/dominante.jpg" },
+    { id: 17, text: "Herencia Recesiva: Rasgo que solo se expresa si ambos alelos son iguales.", img: "/img/recesiva.jpg" },
+    { id: 18, text: "H. Codominante: Tipo de herencia donde ambos alelos se expresan por igual.", img: "/img/codominante.jpg" },
+    { id: 19, text: "Herencia Intermedia: Los rasgos se mezclan creando un fenotipo nuevo (ej. rosa).", img: "/img/intermedia.jpg" },
+    { id: 20, text: "1ra Ley de Mendel: Ley de Uniformidad de los híbridos de la primera generación.", img: "/img/ley1.jpg" },
+    { id: 21, text: "2da Ley de Mendel: Ley de Segregación de los caracteres en la segunda generación.", img: "/img/ley2.jpg" },
+    { id: 22, text: "3ra Ley de Mendel: Ley de la Transmisión Independiente de los caracteres.", img: "/img/ley3.jpg" }
 ];
 
 function startGame() {
